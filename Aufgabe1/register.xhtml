@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        
+        <title >Registrierungsseite</title>
+        <!-- link rel="stylesheet" type="text/css" href="/path/to/style.css" -->
+    </head>
+    <body>
+        <header>
+            <img src="./img/big-logo-small.png" alt = "Big Logo"/>
+            Jeopardy!
+            <input type="submit" id="login" value="Anmelden"/>
+        </header>
+
+        <form action="login.jsp" method="post">
+            <div id="persondata">
+                <h2> Persönliche Daten</h2>
+                <p>
+                    <label for="firstname">Vorname:</label>
+                    <input type="text" id="firstname" name="firstname"/>
+                </p>
+                <p>
+                    <label for="lastname">Nachname:</label>
+                    <input type="text" id="lastname" name="lastname"/>
+                </p>
+                <p>
+                    <label for="birthdate">Geburtstag:</label>
+                    <input type="text" id="birthdate" name="birthdate"/>
+                </p>
+                <p>
+                    <label for="genderlabel">Geschlecht:</label>
+                    <input type="radio" id="male" name="gender" value="male"/><label for="male">Männlich</label>
+                    <input type="radio" id="female" name="gender" value="female"/><label for="female">Weiblich</label>
+                </p>
+            </div>
+            <div id="playerata">
+                <h2> Spielerdaten</h2>
+                <p>
+                    <!--Bin mir hier nicht ganz sicher mit dem DropDown Menü-->
+                    <label for="avatar">Avatar:</label>
+                    <select name="avatarSel">
+                        <option>Aldrich Killian</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="username">Benutzername*:</label>
+                    <input type="text" id="username" name="username"/>
+                </p>
+                <p>
+                    <label for="password">Passwort*:</label>
+                    <input type="password" id="password" name="password"/>
+                </p>
+            </div>
+            <p>
+                <input type="submit" id="register" value="Registrieren"/>
+            </p>
+            <p>Mit "*" gekennzeichnete Felder sind Pflichtfelder</p>
+        </form>
+        
+        <footer>
+            <p>(c) 2015 BIG Jeopardy </p>
+        </footer>
+    </body>
+</html>
