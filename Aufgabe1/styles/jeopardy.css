@@ -2,17 +2,16 @@
 html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}input,select{vertical-align:middle}
 
 html {
-    height: 100%;
+    min-height:100%;
 }
 
 body {
 	height: 100%;
 	font-family: Verdana;
 	font-size: 0.8em;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-	
-	background: linear-gradient(white, #d3d8e8);
+    /*background-repeat: no-repeat;
+    background-attachment: fixed;*/
+	background: linear-gradient(white, #d3d8e8) no-repeat;
 }
 
 header {
@@ -28,21 +27,28 @@ footer {
 
 .logo{
 	float:left;
+	margin: 0.3em;
 }
 
 .orangeButton {
 	float:right;
 	background: linear-gradient(#fa7700, #e66d00);
 	text-align: center;
-	padding: 0.3em 3em;
+	padding: 0.4em 2.7em;
 	text-decoration: none;
 	color: white;
+	margin-right: 1em;
+	margin-top: 1.2em;
+}
+
+.orangeButton:hover {
+	background: #ff912e;
 }
 
 .registerForm {
 	margin-left: auto;
 	margin-right: auto;
-	width: 400px;
+	max-width: 33em;
 }
 
 .registerForm div div {
@@ -50,38 +56,35 @@ footer {
 }
 
 .registerForm label {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
+	display: inline-block;
+	width: 11em;
+	vertical-align: middle;
+}
+
+.registerForm input[type=radio] + label {
+    width: auto;
+	margin-right: 1em;
 }
 
 .registerForm input[type=text],input[type=password],input[type=submit] {
-	float: right;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .registerForm input[type=text],input[type=password] {
-	width: 60%;
+	width: 19em;
 	border-radius: 5px;
 	border: 1px solid black;
 	padding: 0.5em;
 }
 
-.genderBox label {
-	margin-right: 1em;
+.registerForm input[type=submit] {
+	margin-left: 12em;
+	margin-top: 1em;
 }
 
-.genderBox {
-	float:right;
-	width: 60%;
-	padding: 0.5em 1em 0.5em 0em;
-}
-
-.genderBox * {
-	float:left;
-}
-
-.registerButtonContainer {
-	overflow: hidden;
-	margin-top: 3em;
+.registerForm input[type=radio] {
+	margin: 0em 0.3em;
 }
 
 .registerButton {
@@ -90,7 +93,12 @@ footer {
 	padding: 0.3em 3em;
 	color: white;
 	border: 1px solid black;
-	background-color: green;
+	background: linear-gradient(#35d143, #22b72f);
+	cursor: pointer;
+}
+
+.registerButton:hover {
+	background: #35d143;
 }
 
 .registerButton:disabled {
@@ -100,6 +108,27 @@ footer {
 .requiredFieldsTxt {
 	text-align: center;
 	margin-top: 1.5em;
+}
+
+@media screen and ( max-width: 400px ) { 
+	.registerForm input[type=text],input[type=password] {
+		width: 90%;
+		margin: 0.3em;
+	}
+	
+	.registerForm label {
+		margin-left: 0.3em;
+	}
+	
+	.registerForm input[type=submit] {
+		margin-left: 0.3em;
+		width: 93%;
+	}
+	
+	.registerForm label[for=genderlabel]{
+		display: table;
+		margin-bottom: 1em;
+	}
 }
 
 .container > * {
@@ -160,9 +189,11 @@ h1 {
 	margin-left: 1em;
 	float: left;
 	font-size: 1.5em;
+	margin-top: 0.8em;
 }
 
 h2 {
-	color: blue;
+	color: #006bcb;
 	margin-top: 3em;
+	font-size: 1.2em;
 }
