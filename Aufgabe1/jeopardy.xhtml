@@ -17,70 +17,74 @@ and open the template in the editor.
             <h1>Jeopardy!</h1>
             <a href="#" class="orangeButton">Abmelden</a>
         </header>
-        <section class="mainSection">
-            <article class="statusSection">
-                <div class="rightAnswer">Du hast richtig geantwortet: +1000 €</div>
-                <div class="falseAnswer">Deadpool hat falsch geantwortet: -500 €</div>
-                <div class="chosenAnswer">Deadpool hat TUWIEN für € 1000 gewählt.</div>
-            </article>
-			<section class="questionSection">
-				<article class="categorySection">
-					<div class="category">TV</div>
-					<div class="questionDisabled">€ 100</div>
-					<div class="question">€ 200</div>
-					<div class="question">€ 500</div>
-					<div class="question">€ 750</div>
-				</article><!--Preventing whitespaces between the articles
-			 --><article class="categorySection">
-					<div class="category">SSD</div>
-					<div class="question">€ 100</div>
-					<div class="question">€ 200</div>
-					<div class="questionChosen">€ 500</div>
-					<div class="question">€ 750</div>
-					<div class="question">€ 1000</div>
-				</article><!--
-			 --><article class="categorySection">
-					<div class="category">Web</div>
-					<div class="question">€ 100</div>
-					<div class="question">€ 200</div>
-					<div class="questionDisabled">€ 500</div>
-					<div class="question">€ 750</div>
-					<div class="question">€ 1000</div>
-				</article><!--
-			 --><article class="categorySection">
-					<div class="category">Sport</div>
-					<div class="question">€ 100</div>
-					<div class="questionDisabled">€ 200</div>
-					<div class="question">€ 500</div>
-					<div class="question">€ 750</div>
-				</article><!--
-			 --><article class="categorySection">
-					<div class="category">TUWIEN</div>
-					<div class="question">€ 100</div>
-					<div class="question">€ 200</div>
-					<div class="question">€ 500</div>
-					<div class="question">€ 750</div>
-					<div class="questionDisabled">€ 1000</div>
+		<div class="content">
+			<section class="mainSection">
+				<article class="statusSection">
+					<div class="rightAnswer">Du hast richtig geantwortet: +1000 €</div>
+					<div class="falseAnswer">Deadpool hat falsch geantwortet: -500 €</div>
+					<div class="chosenAnswer">Deadpool hat TUWIEN für € 1000 gewählt.</div>
 				</article>
+				<section class="questionSection">
+					<article class="categorySection">
+						<div class="category">TV</div>
+						<div class="questionDisabled">€ 100</div>
+						<div class="question">€ 200</div>
+						<div class="question">€ 500</div>
+						<div class="question">€ 750</div>
+					</article><!--Preventing whitespaces between the articles
+				 --><article class="categorySection">
+						<div class="category">SSD</div>
+						<div class="question">€ 100</div>
+						<div class="question">€ 200</div>
+						<div class="questionChosen">€ 500</div>
+						<div class="question">€ 750</div>
+						<div class="question">€ 1000</div>
+					</article><!--
+				 --><article class="categorySection">
+						<div class="category">Web</div>
+						<div class="question">€ 100</div>
+						<div class="question">€ 200</div>
+						<div class="questionDisabled">€ 500</div>
+						<div class="question">€ 750</div>
+						<div class="question">€ 1000</div>
+					</article><!--
+				 --><article class="categorySection">
+						<div class="category">Sport</div>
+						<div class="question">€ 100</div>
+						<div class="questionDisabled">€ 200</div>
+						<div class="question">€ 500</div>
+						<div class="question">€ 750</div>
+					</article><!--
+				 --><article class="categorySection">
+						<div class="category">TUWIEN</div>
+						<div class="question">€ 100</div>
+						<div class="question">€ 200</div>
+						<div class="question">€ 500</div>
+						<div class="question">€ 750</div>
+						<div class="questionDisabled">€ 1000</div>
+					</article>
+				</section>
+				<div class="choose">
+					<input type="submit" id="choose" value="wählen" class="greenButton chooseButton"/>
+				</div>
+				<div class="lastGame">Letztes Spiel: 22.2.2015 11:07:00</div>
 			</section>
-			<div class="choose">
-				<input type="submit" id="choose" value="wählen" class="greenButton chooseButton"/>
-			</div>
-			<div id="">Letztes Spiel: 22.2.2015 11:07:00</div>
-        </section>
-        <aside class="playerSection">
-            <div>
-                <img src="./img/avatar/black-widow_head.png" alt="Black Widow Image" class="playerAvatar"/>
-                <div class="playerText">Black Widow (Du)<br/>2000 €</div>
-            </div>
-            <div>
-                <img src="./img/avatar/deadpool_head.png" alt="Deadpool Image" class="computerAvatar"/>
-                <div class="computerText">Deadpool<br/>400 €</div>
-            </div>
-            <div class="questionCount">
-                Fragen: 2/10
-            </div>
-        </aside>
+			<aside class="playerSection">
+				<div class="avatars">
+					<div class="player">
+						<img src="./img/avatar/black-widow_head.png" alt="Black Widow Image" class="playerAvatar"/>
+						<div class="playerText">Black Widow (Du)<br/>2000 €</div>
+					</div>
+					<div class="computer">
+						<img src="./img/avatar/deadpool_head.png" alt="Deadpool Image" class="computerAvatar"/>
+						<div class="computerText">Deadpool<br/>400 €</div>
+					</div>
+				</div>
+				<div class="questionCount">
+					Fragen: 2/10
+				</div>
+			</aside>
+		</div>
         <footer>
             <p>(c) 2015 BIG Jeopardy </p>
         </footer>

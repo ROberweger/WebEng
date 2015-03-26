@@ -12,6 +12,7 @@ body {
 	font-family: Verdana;
 	font-size: 0.8em;
 	background: linear-gradient(white, #d3d8e8) no-repeat;
+	min-width: 370px;
 }
 
 header {
@@ -99,11 +100,11 @@ footer {
 	cursor: pointer;
 }
 
-.registerButton:hover {
+.greenButton:hover {
 	background: #35d143;
 }
 
-.registerButton:disabled {
+.greenButtonDisabled {
 	background-color: lightgrey;
 }
 
@@ -148,8 +149,8 @@ footer {
 	vertical-align: top;
 }
 
-.playerSection > div {
-	margin: 1em 0em;
+.computer, .player {
+	margin-top: 1em;
 }
 
 .playerAvatar, .computerAvatar {
@@ -169,6 +170,7 @@ footer {
 .playerText, .computerText {
 	display: inline-block;
 	vertical-align: top;
+	line-height: 2;
 }
 
 .playerText {
@@ -177,6 +179,7 @@ footer {
 
 .questionCount {
 	font-weight: bold;
+	margin-top: 1em;
 }
 
 .statusSection {
@@ -190,9 +193,10 @@ footer {
 
 .rightAnswer, .falseAnswer, .chosenAnswer {
 	text-align: center;
-	width: 40em;
+	width: 80%;
 	margin: 0.5em auto;
-	padding: 0.5em 8em;
+	padding: 0.5em 0em;
+	background: white;
 }
 
 .rightAnswer {
@@ -212,6 +216,7 @@ footer {
 .categorySection {
 	display: inline-block;
 	vertical-align: top;
+	width: 20%;
 }
 
 .category, .question, .questionDisabled, .questionChosen {
@@ -219,7 +224,7 @@ footer {
 	text-align: center;
 	margin: 0.2em;
 	padding: 0.8em 0em;
-	width: 13em;
+	/*width: 14.5em;*/
 }
 
 .category, .questionChosen {
@@ -244,8 +249,12 @@ footer {
 }
 
 .chooseButton {
-	margin: 1em 0.7em;
+	margin: 1em 0.2em;
 	float:right;
+}
+
+.lastGame {
+	margin-left: 0.2em;
 }
 
 h1 {
@@ -259,4 +268,46 @@ h2 {
 	color: #006bcb;
 	margin-top: 3em;
 	font-size: 1.2em;
+}
+
+@media screen and ( max-width: 850px ) { 	
+	.playerSection {
+		display: table-header-group;
+	}
+	
+	.mainSection {
+		display: table-row-group;
+	}
+	
+	.content {
+		display: table;
+		width: 100%;
+	}
+	
+	.avatars {
+		overflow: hidden;
+	}
+	
+	.player {
+		float:left;
+		margin-left: 1em;
+	}
+	
+	.computer {
+		float: right;
+		margin-right: 1em;
+		direction: rtl;
+	}
+	
+	.questionCount {
+		text-align: center;
+	}
+}
+
+@media screen and ( max-width: 450px ) {
+	.categorySection {
+		display: block;
+		width: 99%;
+		margin: 2em 0.1em;
+	}
 }
