@@ -100,14 +100,32 @@ footer {
 	cursor: pointer;
 }
 
+
 .greenButton:hover {
 	background: #35d143;
 }
-
 .greenButtonDisabled {
 	background-color: lightgrey;
 }
+.registerButton{
 
+	background: #35d143;
+	border-radius: 5px;
+	font-size: 1.2em;
+	padding: 0.3em 3em;
+	color: white;
+	border: 1px solid black;
+}
+
+.registerButton:disabled {
+
+	background-color: lightgrey;
+	border-radius: 5px;
+	font-size: 1.2em;
+	padding: 0.3em 3em;
+	color: white;
+	border: 1px solid black;
+}
 .requiredFieldsTxt {
 	text-align: center;
 	margin-top: 1.5em;
