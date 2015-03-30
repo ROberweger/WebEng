@@ -5,7 +5,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
     <head>
         <title >Registrierungsseite</title>
         <link rel="stylesheet" type="text/css" href="styles/jeopardy.css" />
@@ -79,8 +79,9 @@ and open the template in the editor.
         </header>
 		<section class="registerForm">
             <form action="login.jsp" method="post">
+			<fieldset>
 				<div id="persondata">
-					<h2> Persönliche Daten</h2>
+					<legend><h2> Persönliche Daten</h2></legend>
 					<div>
 						<label for="firstname">Vorname:</label>
 						<input type="text" id="firstname" name="firstname"/>
@@ -96,16 +97,18 @@ and open the template in the editor.
                         title="Bitte geben Sie ein korrektes Geburtsdatum an!"
 						onchange="return submitButton()"/>
 					</div>
-					<div>
-						<label for="genderlabel">Geschlecht:</label>
+					<div id="gender">
+						<label for="gender">Geschlecht:</label>
 						<input type="radio" id="male" name="gender" value="male"/><label for="male">Männlich</label>
 						<input type="radio" id="female" name="gender" value="female"/><label for="female">Weiblich</label>
 					</div>
 				</div>
+				</fieldset>
+				<fieldset>
 				<div id="playerata">
-					<h2> Spielerdaten</h2>
+					<legend><h2> Spielerdaten</h2></legend>
 					<div>
-						<label for="avatar">Avatar:</label>
+						<label for="avatarSel">Avatar:</label>
 						<input type="text" id="avatarSel" name="avatarSel" />
 					</div>
 					<div>
@@ -121,6 +124,7 @@ and open the template in the editor.
                                onchange ="return submitButton()"/>
 					</div>
 				</div>
+				</fieldset>
 				<div>
                     <input type="submit" id="register" disabled="disabled" value="Registrieren" class="registerButton" onsubmit="return submitButton()"/>
 				</div>
