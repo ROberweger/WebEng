@@ -287,6 +287,9 @@ h2 {
 	margin-top: 3em;
 	font-size: 1.2em;
 }
+h3{
+	color: #35518e;
+}
 
 @media screen and ( max-width: 850px ) { 	
 	.playerSection {
