@@ -1,2 +1,6 @@
 *.db
 *.ini
+Aufgabe2/lab2/target/*
+Aufgabe2/lab2/.classpath
+Aufgabe2/lab2/.project
+Aufgabe2/lab2/.settings
