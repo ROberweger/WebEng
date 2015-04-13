@@ -8,15 +8,21 @@ public class GameState {
 	 */
 	private Boolean isOpponentAnswerRight;
 	/**
+	 * Change of the prize after a question, e.g. +1000
+	 */
+	private String changeOfPrizeOpponent;
+	/**
 	 * True if the answer of the player is right, false otherwise
 	 */
 	private Boolean isPlayerAnswerRight;
+	/**
+	 * Change of the prize after a question, e.g. +1000
+	 */
+	private String changeOfPrizePlayer;
 	// For display of last chosen question by opponent
 	private String categoryChosenByOpponent;
 	private int valueOfChosenQuestion;
 	
-	
-
 	public GameState() {
 		super();
 		questionCount = 0;
@@ -62,4 +68,19 @@ public class GameState {
 		this.valueOfChosenQuestion = valueOfChosenQuestion;
 	}
 
+	public String getChangeOfPrizeOpponent() {
+		return changeOfPrizeOpponent;
+	}
+
+	public void setChangeOfPrizeOpponent(String changeOfPrizeOpponent) {
+		this.changeOfPrizeOpponent = changeOfPrizeOpponent;
+	}
+
+	public String getChangeOfPrizePlayer() {
+		return changeOfPrizePlayer;
+	}
+
+	public void setChangeOfPrizePlayer(String changeOfPrizePlayer) {
+		this.changeOfPrizePlayer = changeOfPrizePlayer;
+	}
 }
