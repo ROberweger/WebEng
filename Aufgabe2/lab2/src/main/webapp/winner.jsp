@@ -1,3 +1,7 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<jsp:useBean id="gameState" scope="session" type="at.ac.tuwien.big.we15.lab2.api.GameState" />
+<jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="secondPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
@@ -31,40 +35,44 @@
       <div role="main">
          <section id="gameinfo" aria-labelledby="winnerinfoheading">
             <h2 id="winnerinfoheading" class="accessibility">Gewinnerinformationen</h2>
-            <p class="user-info positive-change">Du hast richtig geantwortet: +1000 €</p>
-            <p class="user-info negative-change">Deadpool hat falsch geantwortet: -500 €</p>
+<% if(gameState.getIsPlayerAnswerRight() != null) { %>
+            <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
+<% } %>
+<% if(gameState.getIsOpponentAnswerRight() != null) { %>
+            <p class="user-info negative-change">Deadpool hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+<% } %>
             <section class="playerinfo leader" aria-labelledby="winnerannouncement">
-               <h3 id="winnerannouncement">Gewinner: Black Widow</h3>
-               <img class="avatar" src="img/avatar/black-widow.png" alt="Spieler-Avatar Black Widow" />
+               <h3 id="winnerannouncement">Gewinner: <%= leadingPlayer.getAvatar().getName() %></h3>
+               <img class="avatar" src="img/avatar/<%= leadingPlayer.getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= leadingPlayer.getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername">Black Widow</td>
+                     <td class="playername"><%= leadingPlayer.getAvatar().getName() %></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints">€ 2000</td>
+                     <td class="playerpoints">€ <%= leadingPlayer.getCurrentPrize() %></td>
                   </tr>
                </table>
             </section>
             <section class="playerinfo" aria-labelledby="loserheading">
-               <h3 id="loserheading" class="accessibility">Verlierer: Deadpool</h3>
-               <img class="avatar" src="img/avatar/deadpool_head.png" alt="Spieler-Avatar Deadpool" />
+               <h3 id="loserheading" class="accessibility">Verlierer: <%= secondPlayer.getAvatar().getName() %></h3>
+               <img class="avatar" src="img/avatar/<%= secondPlayer.getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= secondPlayer.getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername">Deadpool</td>
+                     <td class="playername"><%= secondPlayer.getAvatar().getName() %></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints">€ 400</td>
+                     <td class="playerpoints">€ <%= secondPlayer.getCurrentPrize() %></td>
                   </tr>
                </table>
             </section>
          </section>
          <section id="newgame" aria-labelledby="newgameheading">
              <h2 id="newgameheading" class="accessibility">Neues Spiel</h2>
-         	<form action="jeopardy.xhtml" method="post">
+         	<form action="jeopardy" method="post">
                	<input class="clickable orangelink contentlink" id="new_game" type="submit" name="restart" value="Neues Spiel" />
             </form>
          </section>

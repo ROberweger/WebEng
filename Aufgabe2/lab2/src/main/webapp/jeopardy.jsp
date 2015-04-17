@@ -1,3 +1,4 @@
+<%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayCategory" %>
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayValue" %>
 <jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
@@ -82,7 +83,7 @@
 <% if(gameState.getCategoryChosenByOpponent() != null) { %>
             <p class="user-info">Deadpool hat <%= gameState.getCategoryChosenByOpponent() %> für € <%= gameState.getValueOfChosenQuestion() %> gewählt.</p>
 <% } %>
-            <form id="questionform" action="question.xhtml" method="post">
+            <form id="questionform" action="jeopardy" method="post">
                <fieldset>
                <legend class="accessibility">Fragenauswahl</legend>
                
