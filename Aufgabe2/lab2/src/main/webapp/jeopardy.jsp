@@ -1,8 +1,8 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayCategory" %>
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayValue" %>
-<jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
-<jsp:useBean id="secondPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="userPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="oppunentPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
 <jsp:useBean id="playerIsLeading" scope="session" type="java.lang.Boolean" />
 <jsp:useBean id="gameState" scope="session" type="at.ac.tuwien.big.we15.lab2.api.GameState" />
 <jsp:useBean id="categories" scope="session" type="java.util.List<DisplayCategory>" />
@@ -42,29 +42,29 @@
             <h2 id="gameinfoinfoheading" class="accessibility">Spielinformationen</h2>
             <section id="firstplayer" class="playerinfo leader" aria-labelledby="firstplayerheading">
                <h3 id="firstplayerheading" class="accessibility">Führender Spieler</h3>
-               <img class="avatar" src="img/avatar/<%= leadingPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= leadingPlayer.getAvatar().getName() %>" />
+               <img class="avatar" src="img/avatar/<%= userPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= userPlayer.getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= leadingPlayer.getAvatar().getName() %> <%if(playerIsLeading) {%>(Du)<%}%></td>
+                     <td class="playername"><%= userPlayer.getAvatar().getName() %> <%if(playerIsLeading) {%>(Du)<%}%></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints"><%= leadingPlayer.getCurrentPrize() %> €</td>
+                     <td class="playerpoints"><%= userPlayer.getCurrentPrize() %> €</td>
                   </tr>
                </table>
             </section>
             <section id="secondplayer" class="playerinfo" aria-labelledby="secondplayerheading">
                <h3 id="secondplayerheading" class="accessibility">Zweiter Spieler</h3>
-               <img class="avatar" src="img/avatar/<%= secondPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= secondPlayer.getAvatar().getName() %>" />
+               <img class="avatar" src="img/avatar/<%= oppunentPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= oppunentPlayer.getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= secondPlayer.getAvatar().getName() %> <%if(!playerIsLeading) {%>(Du)<%}%></td>
+                     <td class="playername"><%= oppunentPlayer.getAvatar().getName() %> <%if(!playerIsLeading) {%>(Du)<%}%></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints"><%= secondPlayer.getCurrentPrize() %> €</td>
+                     <td class="playerpoints"><%= oppunentPlayer.getCurrentPrize() %> €</td>
                   </tr>
                </table>
             </section>
@@ -78,10 +78,10 @@
             <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
 <% } %>
 <% if(gameState.getIsOpponentAnswerRight() != null) { %>
-            <p class="user-info negative-change">Deadpool hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+            <p class="user-info negative-change"><%= oppunentPlayer.getAvatar().getName() %>  hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
 <% } %>
 <% if(gameState.getCategoryChosenByOpponent() != null) { %>
-            <p class="user-info">Deadpool hat <%= gameState.getCategoryChosenByOpponent() %> für € <%= gameState.getValueOfChosenQuestion() %> gewählt.</p>
+            <p class="user-info"><%= oppunentPlayer.getAvatar().getName() %> hat <%= gameState.getCategoryChosenByOpponent() %> für € <%= gameState.getValueOfChosenQuestion() %> gewählt.</p>
 <% } %>
             <form id="questionform" action="jeopardy" method="post">
                <fieldset>

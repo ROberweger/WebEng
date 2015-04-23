@@ -1,5 +1,6 @@
 package at.ac.tuwien.big.we15.lab2.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,4 +32,38 @@ public class DisplayCategory {
 	public void setSelectableValues(List<DisplayValue> selectableValues) {
 		this.selectableValues = selectableValues;
 	}
+
+	/**
+	 * checks if there are unselected values in this category
+	 * @return true if there are unselected values, false otherwise
+	 */
+	public boolean hasUnselectedValues() {
+		boolean hasUnselected = true;
+
+		for (DisplayValue val : selectableValues) {
+			hasUnselected = hasUnselected || !val.isChosen(); // isChosen true
+																// if it was
+																// already
+																// selected
+		}
+
+		return hasUnselected;
+	}
+
+	/**
+	 * creates a list with all selectable values which are available
+	 * @return list with selectable values
+	 */
+	public List<DisplayValue> getAvailableSelectValues() {
+		List<DisplayValue> unselected = new ArrayList<DisplayValue>();
+
+		for (DisplayValue val : selectableValues) {
+			if (!val.isChosen()) {
+				unselected.add(val);
+			}
+		}
+
+		return unselected;
+	}
+
 }

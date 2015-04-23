@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class BigJeopardyServlet extends HttpServlet {
     private List <DisplayValue> values;
     private List <DisplayQuestion> questions;
     State stateServlet;
+    private PCQuestionSelection oppunentSelection;
 
     @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -35,6 +37,10 @@ public class BigJeopardyServlet extends HttpServlet {
         Boolean playerLeading;
         if(stateServlet == null) {
             stateServlet = State.Chose;
+            
+            //at the beginning init oppunentSelection;
+            oppunentSelection = new PCQuestionSelection();
+            
             personUser = new User();
             personUser.setAvatar(Avatar.getRandomAvatar());
             personUser.setCurrentPrize(0);
@@ -42,8 +48,8 @@ public class BigJeopardyServlet extends HttpServlet {
             pcUser = new User();
             pcUser.setAvatar(Avatar.getRandomAvatar());
             pcUser.setCurrentPrize(0);
-            session.setAttribute("firstplayer", personUser);
-            session.setAttribute("secondplayer", pcUser);
+            session.setAttribute("userPlayer", personUser);
+            session.setAttribute("oppunentPlayer", pcUser);
             playerLeading = false;
             session.setAttribute("playerIsLeading", playerLeading);
             state = new GameState();
@@ -54,14 +60,19 @@ public class BigJeopardyServlet extends HttpServlet {
             }
             categories = jsonQuestionDataProvider.getCategoryData();
             startCategoriesValue(categories);
+            
+            // also set the categories for the question selection of the oppunent
+            oppunentSelection.setCategoryList(categories);
+            
+            
             session.setAttribute("gameState", state);
-            session.setAttribute("questioncategory", displayCategories);
+            session.setAttribute("categories", displayCategories);
             dispatcher = getServletContext()
                     .getRequestDispatcher("/jeopardy.jsp");
             dispatcher.forward(req, resp);
 
         }
-        if(stateServlet ==State.Chose) {
+        else if(stateServlet ==State.Chose) {
             stateServlet = State.question;
             int idCategory = 0;
             int idValue = 0;
@@ -73,6 +84,12 @@ public class BigJeopardyServlet extends HttpServlet {
                 }
             } else {
                 //PC Auswahl
+            	oppunentSelection.selectQuestion(displayCategories, state);
+    			if(state.getIsOpponentAnswerRight()){
+    				pcUser.setCurrentPrize(pcUser.getCurrentPrize()+state.getValueOfChosenQuestion());
+    			}else{
+    				pcUser.setCurrentPrize(pcUser.getCurrentPrize()-state.getValueOfChosenQuestion());
+    			}
             }
             session.setAttribute("gameState", state);
 
@@ -84,7 +101,7 @@ public class BigJeopardyServlet extends HttpServlet {
                     .getRequestDispatcher("/question.jsp");
             dispatcher.forward(req, resp);
         }
-        if(stateServlet == State.question) {
+        else if(stateServlet == State.question) {
 
             Object questiontype = session.getAttribute("questiontype");
             Object questiontext = session.getAttribute("questiontext");
