@@ -41,58 +41,40 @@ public class BigJeopardyServlet extends HttpServlet {
         setState(session.getAttribute("gameState"));
         Object questiontype = session.getAttribute("question");
         String[] answers = req.getParameterValues("answers");
-
         //Punkte des Users werden gesetzt
-            if(answers != null && questiontype != null) {
-                personUser.setCurrentPrize(personUser.getCurrentPrize() + correctAnswer(questiontype, answers));
-            }
-
-        if (personUser.getCurrentPrize() > pcUser.getCurrentPrize()) {
-            playerLeading = true;
-        } else {
-            playerLeading = false;
+        if(answers != null && questiontype != null) {
+            personUser.setCurrentPrize(personUser.getCurrentPrize() + correctAnswer(questiontype, answers));
         }
-        if (state.getQuestionCount() < 10) {
 
-            if (personUser.getCurrentPrize() <= pcUser.getCurrentPrize()) {
-                stateServlet = State.selectionPlayer;
-                session.setAttribute("gameState", state);
-                session.setAttribute("questioncategory", displayCategories);
-                dispatcher = getServletContext()
-                        .getRequestDispatcher("/jeopardy.jsp");
-                dispatcher.forward(req, resp);
-            }
-            else {
-                //PC Auswahl
-                stateServlet = State.Question;
-                int idValue = oppunentSelection.selectQuestion(displayCategories, state);
+
+        if (state.getQuestionCount() < 10) {
+            stateServlet = State.selectionPlayer;
+            if (personUser.getCurrentPrize() > pcUser.getCurrentPrize()) {
+                playerLeading = false;
+                oppunentSelection.selectQuestion(displayCategories, state);
                 if (state.getIsOpponentAnswerRight()) {
                     pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
                 } else {
                     pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
                 }
-                session.setAttribute("leadingPlayer", pcUser);
-                session.setAttribute("secondPlayer", personUser);
-                session.setAttribute("playerIsLeading", playerLeading);
-                DisplayQuestion displayQuestion = getQuestionId(idValue);
-                if(displayQuestion != null) {
-                    state.setQuestionCount(state.getQuestionCount() + 1);
-                    setVisibleCategories(idValue);
-                    state.setCategoryChosenByOpponent(displayQuestion.getCategoryName());
-                    state.setValueOfChosenQuestion(displayQuestion.getValue());
-                    session.setAttribute("gameState", state);
-                    session.setAttribute("question", displayQuestion);
-                    req.setAttribute("question", displayQuestion);
-                    dispatcher = getServletContext()
-                            .getRequestDispatcher("/question.jsp");
-                    dispatcher.forward(req, resp);
-                }
             }
+            else {
+                playerLeading = true;
+            }
+
+            session.setAttribute("questioncategory", displayCategories);
+            dispatcher = getServletContext()
+                    .getRequestDispatcher("/jeopardy.jsp");
+            dispatcher.forward(req, resp);
         } else {
             if (personUser.getCurrentPrize() > pcUser.getCurrentPrize()) {
+                playerLeading = true;
+                session.setAttribute("playerIsLeading", playerLeading);
                 session.setAttribute("leadingPlayer", personUser);
                 session.setAttribute("secondPlayer", pcUser);
             } else {
+                playerLeading = false;
+                session.setAttribute("playerIsLeading", playerLeading);
                 session.setAttribute("leadingPlayer", pcUser);
                 session.setAttribute("secondPlayer", personUser);
             }
@@ -128,7 +110,7 @@ public class BigJeopardyServlet extends HttpServlet {
                 pcUser.setCurrentPrize(0);
                 session.setAttribute("userPlayer", personUser);
                 session.setAttribute("oppunentPlayer", pcUser);
-                playerLeading = false;
+                playerLeading = true;
                 session.setAttribute("playerIsLeading", playerLeading);
                 state = new GameState();
                 state.setQuestionCount(0);
@@ -149,34 +131,49 @@ public class BigJeopardyServlet extends HttpServlet {
             }
             case selectionPlayer: {
                 if(req.getParameter("question_submit")!=null) {
-                    stateServlet = State.Question;
                     Object objectState = session.getAttribute("gameState");
                     setState(objectState);
                     int idValue = 0;
-
+                    DisplayQuestion displayQuestion = null;
                     Object selectedId = req.getParameter("question_selection");
                     if (selectedId != null) {
                         idValue = Integer.parseInt(selectedId.toString());
 
                     }
+                    setVisibleCategories(idValue);
+                    displayQuestion = getQuestionId(idValue);
+                    if(playerLeading) {
+                        oppunentSelection.selectQuestion(displayCategories, state);
+                        if (state.getIsOpponentAnswerRight()) {
+                            pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
+                        } else {
+                            pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
+                        }
+                        session.setAttribute("leadingPlayer", personUser);
+                        session.setAttribute("secondPlayer", pcUser);
+                    }
+                    else {
+                        session.setAttribute("leadingPlayer", personUser);
+                        session.setAttribute("secondPlayer", pcUser);
 
-                    playerLeading = true;
-                    session.setAttribute("leadingPlayer", personUser);
-                    session.setAttribute("secondPlayer", pcUser);
-                    session.setAttribute("playerIsLeading", playerLeading);
-
-                    DisplayQuestion displayQuestion = getQuestionId(idValue);
+                    }
                     if(displayQuestion != null) {
-                        //PC Frage Beantwortung
+                        stateServlet = State.Question;
                         state.setQuestionCount(state.getQuestionCount() + 1);
-                        setVisibleCategories(idValue);
                         state.setCategoryChosenByOpponent(displayQuestion.getCategoryName());
                         state.setValueOfChosenQuestion(displayQuestion.getValue());
                         session.setAttribute("gameState", state);
+                        session.setAttribute("playerIsLeading", playerLeading);
+                        session.setAttribute("questioncategory", displayCategories);
                         session.setAttribute("question", displayQuestion);
                         req.setAttribute("question", displayQuestion);
                         dispatcher = getServletContext()
                                 .getRequestDispatcher("/question.jsp");
+                        dispatcher.forward(req, resp);
+                    }
+                    else{
+                        dispatcher = getServletContext()
+                                .getRequestDispatcher("/jeopardy.jsp");
                         dispatcher.forward(req, resp);
                     }
                 }
@@ -374,5 +371,6 @@ public class BigJeopardyServlet extends HttpServlet {
             }
         }
     }
+
     //endregion
 }
