@@ -28,9 +28,9 @@ public class PCQuestionSelection {
 	 *            displayed categories
 	 * @return
 	 */
-	public void selectQuestion(List<DisplayCategory> dispCategories,
+	public int selectQuestion(List<DisplayCategory> dispCategories,
 			GameState state) {
-
+        int selectedQuestion = 0;
 		DisplayValue actVal = null;
 		int catRange = dispCategories.size() - 1;
 		boolean selected = false;
@@ -48,6 +48,8 @@ public class PCQuestionSelection {
 			int randomValId = (int) (Math.random() * valRange);
 
 			actVal = vals.get(randomValId);
+            selectedQuestion = actVal.getId();
+
 			actVal.setChosen(true);
 			List<Question> questions = categories.get(catIndex).getQuestions();
 
@@ -75,6 +77,7 @@ public class PCQuestionSelection {
 				}
 			}
 		}
+        return selectedQuestion;
 		// }
 	}
 
