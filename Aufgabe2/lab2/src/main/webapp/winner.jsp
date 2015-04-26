@@ -36,10 +36,10 @@
          <section id="gameinfo" aria-labelledby="winnerinfoheading">
             <h2 id="winnerinfoheading" class="accessibility">Gewinnerinformationen</h2>
 <% if(gameState.getIsPlayerAnswerRight() != null) { %>
-            <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
+            <p class="user-info <%= gameState.getIsPlayerAnswerRight() ? "positive-change" : "negative-change" %>">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
 <% } %>
 <% if(gameState.getIsOpponentAnswerRight() != null) { %>
-            <p class="user-info negative-change"><%=oppunentPlayer.getAvatar().getName()%> hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+            <p class="user-info <%= gameState.getIsOpponentAnswerRight() ? "positive-change" : "negative-change" %>"><%=oppunentPlayer.getAvatar().getName()%> hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
 <% } %>
             <section class="playerinfo leader" aria-labelledby="winnerannouncement">
                <h3 id="winnerannouncement">Gewinner: <%= gameState.getLeadingPlayer().getAvatar().getName() %></h3>

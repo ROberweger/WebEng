@@ -74,10 +74,10 @@
          <section id="question-selection" aria-labelledby="questionheading">
             <h2 id="questionheading" class="black accessibility">Jeopardy</h2>
 <% if(gameState.getIsPlayerAnswerRight() != null) { %>
-            <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
+            <p class="user-info <%= gameState.getIsPlayerAnswerRight() ? "positive-change" : "negative-change" %>">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
 <% } %>
 <% if(gameState.getIsOpponentAnswerRight() != null) { %>
-            <p class="user-info negative-change"><%= oppunentPlayer.getAvatar().getName() %>  hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+            <p class="user-info <%= gameState.getIsOpponentAnswerRight() ? "positive-change" : "negative-change" %>"><%= oppunentPlayer.getAvatar().getName() %>  hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
 <% } %>
 <% if(gameState.getCategoryChosenByOpponent() != null) { %>
             <p class="user-info"><%= oppunentPlayer.getAvatar().getName() %> hat <%= gameState.getCategoryChosenByOpponent() %> für € <%= gameState.getValueOfChosenQuestion() %> gewählt.</p>
