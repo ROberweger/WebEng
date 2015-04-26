@@ -2,7 +2,6 @@
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayAnswer" %>
 <jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
 <jsp:useBean id="secondPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
-<jsp:useBean id="playerIsLeading" scope="session" type="java.lang.Boolean" />
 <jsp:useBean id="gameState" scope="session" type="at.ac.tuwien.big.we15.lab2.api.GameState" />
 <jsp:useBean id="question" scope="request" type="at.ac.tuwien.big.we15.lab2.api.DisplayQuestion" />
 <?xml version="1.0" encoding="UTF-8"?>
@@ -41,29 +40,29 @@
             <h2 id="gameinfoinfoheading" class="accessibility">Spielinformationen</h2>
             <section id="firstplayer" class="playerinfo leader" aria-labelledby="firstplayerheading">
                <h3 id="firstplayerheading" class="accessibility">Führender Spieler</h3>
-               <img class="avatar" src="img/avatar/<%= leadingPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= leadingPlayer.getAvatar().getName() %>" />
+               <img class="avatar" src="img/avatar/<%= gameState.getLeadingPlayer().getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= gameState.getLeadingPlayer().getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= leadingPlayer.getAvatar().getName() %> <%if(playerIsLeading) {%>(Du)<%}%></td>
+                     <td class="playername"><%= gameState.getLeadingPlayer().getAvatar().getName() %> <%if(gameState.getIsPlayerLeading()) {%>(Du)<%}%></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints"><%= leadingPlayer.getCurrentPrize() %> €</td>
+                     <td class="playerpoints"><%= gameState.getLeadingPlayer().getCurrentPrize() %> €</td>
                   </tr>
                </table>
             </section>
             <section id="secondplayer" class="playerinfo" aria-labelledby="secondplayerheading">
                <h3 id="secondplayerheading" class="accessibility">Zweiter Spieler</h3>
-               <img class="avatar" src="img/avatar/<%= secondPlayer.getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= secondPlayer.getAvatar().getName() %>" />
+               <img class="avatar" src="img/avatar/<%=gameState.getSecondPlayer().getAvatar().getImageHead() %>" alt="Spieler-Avatar <%= gameState.getSecondPlayer().getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= secondPlayer.getAvatar().getName() %> <%if(!playerIsLeading) {%>(Du)<%}%></td>
+                     <td class="playername"><%= gameState.getSecondPlayer().getAvatar().getName() %> <%if(!gameState.getIsPlayerLeading()) {%>(Du)<%}%></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints"><%= secondPlayer.getCurrentPrize() %> €</td>
+                     <td class="playerpoints"><%= gameState.getSecondPlayer().getCurrentPrize() %> €</td>
                   </tr>
                </table>
             </section>

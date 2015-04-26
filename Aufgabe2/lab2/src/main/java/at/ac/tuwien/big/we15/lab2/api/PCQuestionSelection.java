@@ -45,7 +45,7 @@ public class PCQuestionSelection {
 
 			int valRange = vals.size() - 1;
 			int randomValId = (int) (Math.random() * valRange);
-
+			
 			actVal = vals.get(randomValId);
 
 			actVal.setChosen(true);

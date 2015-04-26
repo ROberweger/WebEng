@@ -1,6 +1,11 @@
 package at.ac.tuwien.big.we15.lab2.api;
 
 public class GameState {
+	
+	
+	private User leadingPlayer;
+	private User secondPlayer;
+	private boolean isPlayerLeading;
 
 	private int questionCount;
 	/**
@@ -82,5 +87,29 @@ public class GameState {
 
 	public void setChangeOfPrizePlayer(String changeOfPrizePlayer) {
 		this.changeOfPrizePlayer = changeOfPrizePlayer;
+	}
+	
+	public void setPlayer(User userPlayer, User oppunentPlayer){
+		if(userPlayer.getCurrentPrize()>=oppunentPlayer.getCurrentPrize()){
+			leadingPlayer = userPlayer;
+			secondPlayer = oppunentPlayer;
+			isPlayerLeading = true;
+		}else{
+			leadingPlayer = oppunentPlayer;
+			secondPlayer = userPlayer;
+			isPlayerLeading = false;
+		}
+	}
+	
+	public User getLeadingPlayer(){
+		return leadingPlayer;
+	}
+	
+	public User getSecondPlayer(){
+		return secondPlayer;
+	}
+	
+	public boolean getIsPlayerLeading(){
+		return isPlayerLeading;
 	}
 }

@@ -8,17 +8,18 @@ import java.util.List;
 public class DisplayQuestion {
 
 	private String categoryName;
-	private int value;
+	private int value, id;
 	private String questionText;
 	private List<DisplayAnswer> answers;
 
-	public DisplayQuestion(String categoryName, int value, String questionText,
+	public DisplayQuestion(String categoryName, int value, int id, String questionText,
 			List<DisplayAnswer> answers) {
 		super();
 		this.categoryName = categoryName;
 		this.value = value;
 		this.questionText = questionText;
 		this.answers = answers;
+		this.id = id;
 	}
 
 	public String getCategoryName() {
@@ -27,6 +28,10 @@ public class DisplayQuestion {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public int getValue() {

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:useBean id="gameState" scope="session" type="at.ac.tuwien.big.we15.lab2.api.GameState" />
-<jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
-<jsp:useBean id="secondPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="userPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="oppunentPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
@@ -39,33 +39,33 @@
             <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
 <% } %>
 <% if(gameState.getIsOpponentAnswerRight() != null) { %>
-            <p class="user-info negative-change">Deadpool hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+            <p class="user-info negative-change"><%=oppunentPlayer.getAvatar().getName()%> %> hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
 <% } %>
             <section class="playerinfo leader" aria-labelledby="winnerannouncement">
-               <h3 id="winnerannouncement">Gewinner: <%= leadingPlayer.getAvatar().getName() %></h3>
-               <img class="avatar" src="img/avatar/<%= leadingPlayer.getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= leadingPlayer.getAvatar().getName() %>" />
+               <h3 id="winnerannouncement">Gewinner: <%= gameState.getLeadingPlayer().getAvatar().getName() %></h3>
+               <img class="avatar" src="img/avatar/<%= gameState.getLeadingPlayer().getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= gameState.getLeadingPlayer().getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= leadingPlayer.getAvatar().getName() %></td>
+                     <td class="playername"><%= gameState.getLeadingPlayer().getAvatar().getName() %></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints">€ <%= leadingPlayer.getCurrentPrize() %></td>
+                     <td class="playerpoints">€ <%= gameState.getLeadingPlayer().getCurrentPrize() %></td>
                   </tr>
                </table>
             </section>
             <section class="playerinfo" aria-labelledby="loserheading">
-               <h3 id="loserheading" class="accessibility">Verlierer: <%= secondPlayer.getAvatar().getName() %></h3>
-               <img class="avatar" src="img/avatar/<%= secondPlayer.getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= secondPlayer.getAvatar().getName() %>" />
+               <h3 id="loserheading" class="accessibility">Verlierer: <%= gameState.getSecondPlayer().getAvatar().getName() %></h3>
+               <img class="avatar" src="img/avatar/<%= gameState.getSecondPlayer().getAvatar().getImageFull() %>" alt="Spieler-Avatar <%= gameState.getSecondPlayer().getAvatar().getName() %>" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername"><%= secondPlayer.getAvatar().getName() %></td>
+                     <td class="playername"><%= gameState.getSecondPlayer().getAvatar().getName() %></td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints">€ <%= secondPlayer.getCurrentPrize() %></td>
+                     <td class="playerpoints">€ <%= gameState.getSecondPlayer().getCurrentPrize() %></td>
                   </tr>
                </table>
             </section>
