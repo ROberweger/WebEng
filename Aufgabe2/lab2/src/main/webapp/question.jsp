@@ -66,7 +66,7 @@
                   </tr>
                </table>
             </section>
-            <p id="round">Fragen: <%= gameState.getQuestionCount() %> / 10</p>
+            <p id="round">Fragen: <%= gameState.getQuestionCountPlayer() %> / 10</p>
          </section>
             
       <!-- Question -->
