@@ -22,32 +22,40 @@ public class BigJeopardyServlet extends HttpServlet {
     private List<DisplayCategory> displayCategories;
     private List <DisplayValue> values;
     private List <DisplayQuestion> questions;
-    private State stateServlet;
+
     private PCQuestionSelection oppunentSelection;
     private GameState state;
 
 
     @Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         HttpSession session = req.getSession(true);
         RequestDispatcher dispatcher;
-        //Object objectState = session.getAttribute("gameState");
-        //setState(objectState);
+        //Get game from jsp
         setState(session.getAttribute("gameState"));
+        displayCategories = state.getDisplayCategories();
+        if(state.getIsPlayerLeading()){
+            personUser = state.getLeadingPlayer();
+            pcUser = state.getSecondPlayer();
+        }
+        else{
+            personUser = state.getSecondPlayer();
+            pcUser = state.getLeadingPlayer();
+        }
         Object questiontype = session.getAttribute("question");
         String[] answers = req.getParameterValues("answers");
-        //Punkte des Users werden gesetzt
+
+        //Points
         if(answers != null && questiontype != null) {
             personUser.setCurrentPrize(personUser.getCurrentPrize() + correctAnswer(questiontype, answers));
         }
         state.setPlayer(personUser, pcUser);
-
-
-        if (state.getQuestionCount() < 10) {
-            stateServlet = State.selectionPlayer;
-            if (state.getIsPlayerLeading()&&state.getQuestionCount()==oppunentSelection.getCount()) {
+        if (state.getQuestionCountPlayer() < 10) {
+            //PC Selection
+            if (state.getIsPlayerLeading()&&state.getQuestionCountPlayer()==state.getQuestionCountPC()) {
+                state.setQuestionCountPC(state.getQuestionCountPC()+1);
                 oppunentSelection.selectQuestion(displayCategories, state);
                 if (state.getIsOpponentAnswerRight()) {
                     pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
@@ -55,143 +63,146 @@ public class BigJeopardyServlet extends HttpServlet {
                     pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
                 }
             }
-            
             state.setPlayer(personUser, pcUser);
-            session.setAttribute("questioncategory", displayCategories);
+            session.setAttribute("gameState", state);
+            session.setAttribute("userPlayer", personUser);
+            session.setAttribute("oppunentPlayer", pcUser);
+            session.setAttribute("categories", displayCategories);
+
             dispatcher = getServletContext()
                     .getRequestDispatcher("/jeopardy.jsp");
             dispatcher.forward(req, resp);
         } else {
-        	session.setAttribute("userPlayer", personUser);
-            session.setAttribute("oppunentPlayer", pcUser);
-            
-            
             state.setPlayer(personUser, pcUser);
+            session.setAttribute("userPlayer", personUser);
+            session.setAttribute("oppunentPlayer", pcUser);
             session.setAttribute("gameState", state);
             dispatcher = getServletContext()
                     .getRequestDispatcher("/winner.jsp");
             dispatcher.forward(req, resp);
         }
-
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		//Neue Session
-        HttpSession session = req.getSession(true);
+    }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         RequestDispatcher dispatcher;
+        HttpSession session = req.getSession(true);
+        if ((req.getParameter("login")!= null)){
 
-        if(stateServlet == null){
-            stateServlet= State.Begin;
-        }
-        switch (stateServlet) {
-            case Begin:{
-                stateServlet = State.selectionPlayer;
-                //at the beginning init oppunentSelection;
-                oppunentSelection = new PCQuestionSelection();
-                personUser = new User();
-                personUser.setAvatar(Avatar.getRandomAvatar());
-                personUser.setCurrentPrize(0);
-                pcUser = new User();
-                pcUser.setAvatar(Avatar.getRandomAvatar());
-                pcUser.setCurrentPrize(0);
-                session.setAttribute("userPlayer", personUser);
-                session.setAttribute("oppunentPlayer", pcUser);
-                
-                state = new GameState();
-                state.setQuestionCount(0);
-                state.setPlayer(personUser, pcUser);
+            //at the beginning init oppunentSelection;
+            oppunentSelection = new PCQuestionSelection();
+            personUser = new User();
+            personUser.setAvatar(Avatar.getRandomAvatar());
+            personUser.setCurrentPrize(0);
+            pcUser = new User();
+            pcUser.setAvatar(Avatar.getRandomAvatar());
+            pcUser.setCurrentPrize(0);
+            state = new GameState();
+
+
+            if(categories == null|| displayCategories == null){
                 if (jsonQuestionDataProvider == null) {
                     ServletJeopardyFactory servletJeopardyFactory = new ServletJeopardyFactory(this.getServletContext());
                     jsonQuestionDataProvider = servletJeopardyFactory.createQuestionDataProvider();
                 }
                 categories = jsonQuestionDataProvider.getCategoryData();
                 startCategoriesValue(categories);
-                // also set the categories for the question selection of the oppunent
-                oppunentSelection.setCategoryList(categories);
-                
-                session.setAttribute("gameState", state);
-                session.setAttribute("categories", displayCategories);
-                dispatcher = getServletContext()
-                        .getRequestDispatcher("/jeopardy.jsp");
-                dispatcher.forward(req, resp);
-                break;
             }
-            case selectionPlayer: {
-                if(req.getParameter("question_submit")!=null) {
-                    Object objectState = session.getAttribute("gameState");
-                    setState(objectState);
-                    int idValue = 0;
-                    DisplayQuestion displayQuestion = null;
-                    Object selectedId = req.getParameter("question_selection");
-                    if (selectedId != null) {
-                        idValue = Integer.parseInt(selectedId.toString());
+            else{
+                setAllDisplayCathegories(false);
+            }
+            // also set the categories for the question selection of the oppunent
+            oppunentSelection.setCategoryList(categories);
+            state.setDisplayCategories(displayCategories);
+            state.setPlayer(personUser, pcUser);
+            session.setAttribute("userPlayer", personUser);
+            session.setAttribute("oppunentPlayer", pcUser);
+            session.setAttribute("gameState", state);
+            session.setAttribute("categories", displayCategories);
+            dispatcher = getServletContext()
+                    .getRequestDispatcher("/jeopardy.jsp");
+            dispatcher.forward(req, resp);
+        }
 
-                    }
-                    setVisibleCategories(idValue);
-                    displayQuestion = getQuestionId(idValue);
+        if((req.getParameter("question_submit")!=null)) {
 
-                    if(displayQuestion != null) {
-                        stateServlet = State.Question;
-                        state.setQuestionCount(state.getQuestionCount() + 1);
-                        
-                        //state.setCategoryChosenByOpponent(displayQuestion.getCategoryName());
-                        //state.setValueOfChosenQuestion(displayQuestion.getValue());
-                        
-                        if (oppunentSelection.getCount()<state.getQuestionCount()) {
-                            oppunentSelection.selectQuestion(displayCategories, state);
-                            if (state.getIsOpponentAnswerRight()) {
-                                pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
-                            } else {
-                                pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
-                            }
-                        }
-                        
-                        session.setAttribute("userPlayer", personUser);
-                        session.setAttribute("oppunentPlayer", pcUser);
-                        state.setPlayer(personUser, pcUser);
-                        
-                        session.setAttribute("gameState", state);                        
-                        session.setAttribute("questioncategory", displayCategories);
-                        session.setAttribute("question", displayQuestion);
-                        req.setAttribute("question", displayQuestion);
-                        dispatcher = getServletContext()
-                                .getRequestDispatcher("/question.jsp");
-                        dispatcher.forward(req, resp);
-                    }
-                    else{
-                        dispatcher = getServletContext()
-                                .getRequestDispatcher("/jeopardy.jsp");
-                        dispatcher.forward(req, resp);
+            setState(session.getAttribute("gameState"));
+            displayCategories = state.getDisplayCategories();
+            if(state.getIsPlayerLeading()){
+                personUser = state.getLeadingPlayer();
+                pcUser = state.getSecondPlayer();
+            }
+            else{
+                personUser = state.getSecondPlayer();
+                pcUser = state.getLeadingPlayer();
+            }
+            int idValue = 0;
+            DisplayQuestion displayQuestion = null;
+            Object selectedId = req.getParameter("question_selection");
+            if (selectedId != null) {
+                idValue = Integer.parseInt(selectedId.toString());
+                setVisibleCategories(idValue);
+                displayQuestion = getQuestionId(idValue);
+
+            }
+            if(displayQuestion != null) {
+                state.setQuestionCountPlayer(state.getQuestionCountPlayer() + 1);
+                if (state.getQuestionCountPC() < state.getQuestionCountPlayer()) {
+                    state.setQuestionCountPC(state.getQuestionCountPC()+1);
+                    oppunentSelection.selectQuestion(displayCategories, state);
+                    if (state.getIsOpponentAnswerRight()) {
+                        pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
+                    } else {
+                        pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
                     }
                 }
-                break;
-            }
-            default:
-                personUser.setCurrentPrize(0);
-                pcUser.setCurrentPrize(0);
-
-                setAllDisplayCathegories(false);
-                GameState oldgame = state;
-                state = new GameState();
-                state.setQuestionCount(0);
                 state.setPlayer(personUser, pcUser);
                 session.setAttribute("userPlayer", personUser);
                 session.setAttribute("oppunentPlayer", pcUser);
-
                 session.setAttribute("gameState", state);
-                session.setAttribute("categories", displayCategories);
-                session.setAttribute("categories", displayCategories);
-                stateServlet = State.selectionPlayer;
+                session.setAttribute("questioncategory", displayCategories);
+                session.setAttribute("question", displayQuestion);
+                req.setAttribute("question", displayQuestion);
+                dispatcher = getServletContext()
+                        .getRequestDispatcher("/question.jsp");
+                dispatcher.forward(req, resp);
+            }
+            else{
                 dispatcher = getServletContext()
                         .getRequestDispatcher("/jeopardy.jsp");
                 dispatcher.forward(req, resp);
-
-                break;
+            }
         }
-		
-	}
+        else{
+            if(req.getParameter("restart") != null) {
+
+                setState(session.getAttribute("gameState"));
+                displayCategories = state.getDisplayCategories();
+                if(state.getIsPlayerLeading()){
+                    personUser = state.getLeadingPlayer();
+                    pcUser = state.getSecondPlayer();
+                }
+                else{
+                    personUser = state.getSecondPlayer();
+                    pcUser = state.getLeadingPlayer();
+                }
+                setAllDisplayCathegories(false);
+                state = new GameState();
+                personUser.setCurrentPrize(0);
+                pcUser.setCurrentPrize(0);
+                state.setPlayer(personUser, pcUser);
+                state.setDisplayCategories(displayCategories);
+                session.setAttribute("userPlayer", personUser);
+                session.setAttribute("oppunentPlayer", pcUser);
+                session.setAttribute("gameState", state);
+                session.setAttribute("categories", displayCategories);
+                dispatcher = getServletContext()
+                        .getRequestDispatcher("/jeopardy.jsp");
+                dispatcher.forward(req, resp);
+            }
+        }
+
+    }
 
     // region private Methoden
 
@@ -226,18 +237,18 @@ public class BigJeopardyServlet extends HttpServlet {
         DisplayQuestion displayQuestion =  null;
         for(Category c: categories){
             for(Question q: c.getQuestions()) {
-            if (q.getId() == idValue) {
-                List<DisplayAnswer> displayAnswers = new LinkedList<>();
-                for (Answer a : q.getAllAnswers()) {
-                    displayAnswers.add(new DisplayAnswer(a.getId(), a.getText()));
-                }
+                if (q.getId() == idValue) {
+                    List<DisplayAnswer> displayAnswers = new LinkedList<>();
+                    for (Answer a : q.getAllAnswers()) {
+                        displayAnswers.add(new DisplayAnswer(a.getId(), a.getText()));
+                    }
 
-                displayQuestion = new DisplayQuestion(q.getCategory().getName(), q.getValue(), q.getId(), q.getText(), displayAnswers);
-                displayQuestion = randomQuestionAnswers(displayQuestion);
-                state.setCategoryChosenByOpponent(c.getName());
-                state.setValueOfChosenQuestion(idValue);
+                    displayQuestion = new DisplayQuestion(q.getCategory().getName(), q.getValue(), q.getId(), q.getText(), displayAnswers);
+                    displayQuestion = randomQuestionAnswers(displayQuestion);
+                    state.setCategoryChosenByOpponent(c.getName());
+                    state.setValueOfChosenQuestion(idValue);
 
-                return displayQuestion;
+                    return displayQuestion;
                 }
             }
 
@@ -289,35 +300,35 @@ public class BigJeopardyServlet extends HttpServlet {
     private int correctAnswer(Object id,  String[] answer) {
 
         if (id instanceof DisplayQuestion) {
-        	DisplayQuestion disp = (DisplayQuestion)id;
-        	int questID = disp.getId();
-        	for (Category c : categories) {
-                    for (Question q : c.getQuestions()) {
-                        if (q.getId() == disp.getId()) {
-                            boolean correct = true;
-                            if(answer.length == q.getCorrectAnswers().size()){
+            DisplayQuestion disp = (DisplayQuestion)id;
+            int questID = disp.getId();
+            for (Category c : categories) {
+                for (Question q : c.getQuestions()) {
+                    if (q.getId() == disp.getId()) {
+                        boolean correct = true;
+                        if(answer.length == q.getCorrectAnswers().size()){
                             for(String s: answer){
                                 if(correct){
                                     correct = isCorrectAnswer(q.getCorrectAnswers(), Integer.parseInt(s));
                                 }
                             }
-                            }
-                            else {
-                                correct = false;
-                            }
-                            if(correct){
-                                state.setChangeOfPrizePlayer("+"+q.getValue());
-                                state.setIsPlayerAnswerRight(true);
-                                return q.getValue();
-                            }
-                            else{
-                                state.setChangeOfPrizePlayer("-"+q.getValue());
-                                state.setIsPlayerAnswerRight(false);
-                                return q.getValue() *(-1);
-                            }
-
                         }
+                        else {
+                            correct = false;
+                        }
+                        if(correct){
+                            state.setChangeOfPrizePlayer("+"+q.getValue());
+                            state.setIsPlayerAnswerRight(true);
+                            return q.getValue();
+                        }
+                        else{
+                            state.setChangeOfPrizePlayer("-"+q.getValue());
+                            state.setIsPlayerAnswerRight(false);
+                            return q.getValue() *(-1);
+                        }
+
                     }
+                }
             }
         }
         return 0;
