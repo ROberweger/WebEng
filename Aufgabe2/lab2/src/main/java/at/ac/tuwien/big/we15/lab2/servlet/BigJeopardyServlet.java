@@ -25,8 +25,7 @@ public class BigJeopardyServlet extends HttpServlet {
     private State stateServlet;
     private PCQuestionSelection oppunentSelection;
     private GameState state;
-    //private Boolean playerLeading;
-    //private Boolean pcAnswerRight;
+
 
     @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -43,11 +42,12 @@ public class BigJeopardyServlet extends HttpServlet {
         if(answers != null && questiontype != null) {
             personUser.setCurrentPrize(personUser.getCurrentPrize() + correctAnswer(questiontype, answers));
         }
+        state.setPlayer(personUser, pcUser);
 
 
         if (state.getQuestionCount() < 10) {
             stateServlet = State.selectionPlayer;
-            if (personUser.getCurrentPrize() > pcUser.getCurrentPrize()) {
+            if (state.getIsPlayerLeading()&&state.getQuestionCount()==oppunentSelection.getCount()) {
                 oppunentSelection.selectQuestion(displayCategories, state);
                 if (state.getIsOpponentAnswerRight()) {
                     pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
@@ -57,7 +57,6 @@ public class BigJeopardyServlet extends HttpServlet {
             }
             
             state.setPlayer(personUser, pcUser);
-
             session.setAttribute("questioncategory", displayCategories);
             dispatcher = getServletContext()
                     .getRequestDispatcher("/jeopardy.jsp");
@@ -111,6 +110,7 @@ public class BigJeopardyServlet extends HttpServlet {
                 startCategoriesValue(categories);
                 // also set the categories for the question selection of the oppunent
                 oppunentSelection.setCategoryList(categories);
+                
                 session.setAttribute("gameState", state);
                 session.setAttribute("categories", displayCategories);
                 dispatcher = getServletContext()
@@ -131,28 +131,28 @@ public class BigJeopardyServlet extends HttpServlet {
                     }
                     setVisibleCategories(idValue);
                     displayQuestion = getQuestionId(idValue);
-                    if(state.getIsPlayerLeading()) {
-                        oppunentSelection.selectQuestion(displayCategories, state);
-                        if (state.getIsOpponentAnswerRight()) {
-                            pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
-                        } else {
-                            pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
-                        }
-                        
-                        
-                        session.setAttribute("userPlayer", personUser);
-                        session.setAttribute("oppunentPlayer", pcUser);
-                    }
-                    
-                    state.setPlayer(personUser, pcUser);
 
                     if(displayQuestion != null) {
                         stateServlet = State.Question;
                         state.setQuestionCount(state.getQuestionCount() + 1);
-                        state.setCategoryChosenByOpponent(displayQuestion.getCategoryName());
-                        state.setValueOfChosenQuestion(displayQuestion.getValue());
-                        session.setAttribute("gameState", state);
-
+                        
+                        //state.setCategoryChosenByOpponent(displayQuestion.getCategoryName());
+                        //state.setValueOfChosenQuestion(displayQuestion.getValue());
+                        
+                        if (oppunentSelection.getCount()<state.getQuestionCount()) {
+                            oppunentSelection.selectQuestion(displayCategories, state);
+                            if (state.getIsOpponentAnswerRight()) {
+                                pcUser.setCurrentPrize(pcUser.getCurrentPrize() + state.getValueOfChosenQuestion());
+                            } else {
+                                pcUser.setCurrentPrize(pcUser.getCurrentPrize() - state.getValueOfChosenQuestion());
+                            }
+                        }
+                        
+                        session.setAttribute("userPlayer", personUser);
+                        session.setAttribute("oppunentPlayer", pcUser);
+                        state.setPlayer(personUser, pcUser);
+                        
+                        session.setAttribute("gameState", state);                        
                         session.setAttribute("questioncategory", displayCategories);
                         session.setAttribute("question", displayQuestion);
                         req.setAttribute("question", displayQuestion);

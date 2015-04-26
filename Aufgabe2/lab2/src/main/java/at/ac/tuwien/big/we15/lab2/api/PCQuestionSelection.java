@@ -10,7 +10,8 @@ import java.util.List;
 public class PCQuestionSelection {
 
 	private List<Category> categories;
-
+	private int count;
+	
 	/**
 	 * sets the available categories for chose questions
 	 * 
@@ -19,6 +20,7 @@ public class PCQuestionSelection {
 	 */
 	public void setCategoryList(List<Category> categories) {
 		this.categories = categories;
+		count = 0;
 	}
 
 	/**
@@ -75,6 +77,7 @@ public class PCQuestionSelection {
 				}
 			}
 		}
+		count++;
 		// }
 	}
 
@@ -141,5 +144,9 @@ public class PCQuestionSelection {
 		}
 		return allCorrect;
 
+	}
+	
+	public int getCount(){
+		return count;
 	}
 }

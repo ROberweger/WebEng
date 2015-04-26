@@ -2,9 +2,19 @@ package at.ac.tuwien.big.we15.lab2.api;
 
 public class GameState {
 	
-	
+	/**
+	 * the player who is leading
+	 */
 	private User leadingPlayer;
+	
+	/**
+	 * the player who is second
+	 */
 	private User secondPlayer;
+	
+	/**
+	 * true if person player is leading, false otherwise
+	 */
 	private boolean isPlayerLeading;
 
 	private int questionCount;
@@ -89,26 +99,47 @@ public class GameState {
 		this.changeOfPrizePlayer = changeOfPrizePlayer;
 	}
 	
+	/**
+	 * sets the leading and second player and if the person player is leading or not
+	 * @param userPlayer the user player object
+	 * @param oppunentPlayer the pc player object
+	 */
 	public void setPlayer(User userPlayer, User oppunentPlayer){
-		if(userPlayer.getCurrentPrize()>=oppunentPlayer.getCurrentPrize()){
+		if(userPlayer.getCurrentPrize()>oppunentPlayer.getCurrentPrize()){
 			leadingPlayer = userPlayer;
 			secondPlayer = oppunentPlayer;
 			isPlayerLeading = true;
-		}else{
+		}else if (userPlayer.getCurrentPrize()<oppunentPlayer.getCurrentPrize()){
 			leadingPlayer = oppunentPlayer;
 			secondPlayer = userPlayer;
+			isPlayerLeading = false;
+		}else{
+			leadingPlayer = userPlayer;
+			secondPlayer = oppunentPlayer;
 			isPlayerLeading = false;
 		}
 	}
 	
+	/**
+	 * returns the leading player of the game
+	 * @return leading user object
+	 */
 	public User getLeadingPlayer(){
 		return leadingPlayer;
 	}
 	
+	/**
+	 * returns the second player of the game
+	 * @return second user object
+	 */
 	public User getSecondPlayer(){
 		return secondPlayer;
 	}
 	
+	/**
+	 * returns if the person player is leading
+	 * @return true if person player is leading, false otherwise
+	 */
 	public boolean getIsPlayerLeading(){
 		return isPlayerLeading;
 	}

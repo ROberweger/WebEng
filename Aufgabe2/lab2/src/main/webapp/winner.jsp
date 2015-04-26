@@ -39,7 +39,7 @@
             <p class="user-info positive-change">Du hast <%= gameState.getIsPlayerAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizePlayer() %> €</p>
 <% } %>
 <% if(gameState.getIsOpponentAnswerRight() != null) { %>
-            <p class="user-info negative-change"><%=oppunentPlayer.getAvatar().getName()%> %> hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
+            <p class="user-info negative-change"><%=oppunentPlayer.getAvatar().getName()%> hat <%= gameState.getIsOpponentAnswerRight() ? "richtig" : "falsch" %> geantwortet: <%= gameState.getChangeOfPrizeOpponent() %> €</p>
 <% } %>
             <section class="playerinfo leader" aria-labelledby="winnerannouncement">
                <h3 id="winnerannouncement">Gewinner: <%= gameState.getLeadingPlayer().getAvatar().getName() %></h3>
