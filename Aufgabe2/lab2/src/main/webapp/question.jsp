@@ -1,7 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="at.ac.tuwien.big.we15.lab2.api.DisplayAnswer" %>
-<jsp:useBean id="leadingPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
-<jsp:useBean id="secondPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="userPlayer" scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
+<jsp:useBean id="oppunentPlayer"  scope="session" class="at.ac.tuwien.big.we15.lab2.api.User" />
 <jsp:useBean id="gameState" scope="session" type="at.ac.tuwien.big.we15.lab2.api.GameState" />
 <jsp:useBean id="question" scope="request" type="at.ac.tuwien.big.we15.lab2.api.DisplayQuestion" />
 <?xml version="1.0" encoding="UTF-8"?>
