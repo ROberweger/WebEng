@@ -18,9 +18,9 @@ public class GameState {
      * true if person player is leading, false otherwise
      */
     private boolean isPlayerLeading;
-
+    private boolean isPlayerEqual;
     private int questionCountPlayer;
-    private int questionCountPC;
+    private int questionCountOpponent;
     /**
      * True if the answer of the opponent is right, false otherwise
      */
@@ -45,7 +45,7 @@ public class GameState {
     public GameState() {
         super();
         questionCountPlayer = 0;
-        questionCountPC = 0;
+        questionCountOpponent = 0;
     }
 
     public int getQuestionCountPlayer() {
@@ -114,13 +114,16 @@ public class GameState {
             leadingPlayer = userPlayer;
             secondPlayer = oppunentPlayer;
             isPlayerLeading = true;
+            isPlayerEqual = false;
         }else if (userPlayer.getCurrentPrize()<oppunentPlayer.getCurrentPrize()){
             leadingPlayer = oppunentPlayer;
             secondPlayer = userPlayer;
             isPlayerLeading = false;
+            isPlayerEqual = false;
         }else{
-            leadingPlayer = userPlayer;
-            secondPlayer = oppunentPlayer;
+            leadingPlayer = oppunentPlayer;
+            secondPlayer = userPlayer;
+            isPlayerEqual = true;
             isPlayerLeading = false;
         }
     }
@@ -157,11 +160,15 @@ public class GameState {
         this.displayCategories = displayCategories;
     }
 
-    public int getQuestionCountPC() {
-        return questionCountPC;
+    public int getQuestionCountOpponent() {
+        return questionCountOpponent;
     }
 
-    public void setQuestionCountPC(int questionCountPC) {
-        this.questionCountPC = questionCountPC;
+    public void setQuestionCountOpponent(int questionCountOpponent) {
+        this.questionCountOpponent = questionCountOpponent;
+    }
+
+    public boolean isPlayerEqual() {
+        return isPlayerEqual;
     }
 }
