@@ -17,5 +17,5 @@ libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.2"
 )
 
-templateImport += "scala.collection._"
+templateImport += "scala.collection._",
 templateImport += "at.ac.tuwien.big.we15.lab2.api._"
