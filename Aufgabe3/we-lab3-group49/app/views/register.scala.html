@@ -1,3 +1,4 @@
+@ (registerForm: Form[at.ac.tuwien.big.we15.lab2.api.Userdata]))
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -30,88 +31,84 @@
       <div id="register" role="main"> 
             <!-- Register section -->
             <h2 id="registerheading" class="accessibility">Registrierung</h2>
-            <form action="login.xhtml" method="post">
+            @helper.form(action = routes.Application.register){
                 <fieldset>
                     <legend>Persönliche Daten</legend>
-                    <label for="firstname">Vorname:</label>
-                    <input id="firstname" type="text" name="firstname"/>
+                    @helper.inputText(registerForm("firstname"))
                     
-                    <label for="lastname">Nachname:</label>
-                    <input id="lastname" type="text" name="lastname"/>
+                    @helper.inputText(registerForm("lastname"))
                     
-                    <label for="birthdate">Geburtstag:</label>
-                    <input id="birthdate" type="date" name="birthdate"/>
+                    @helper.inputDate(registerForm("birthdate"))
+                    
+                    @for(error <- registerForm("birthdate").errors)){
                     <div id="error_msg_birthdate" class="hide" role="alert">Verwenden Sie bitte folgendes Datumsformat: dd.mm.yyyy (z.B. 24.12.2010).</div>
+                    }
                     
                     <label>Geschlecht:</label>
                     <fieldset class="inputset">
-                        <input type="radio" name="gender" id="male" value="m" checked="checked" />
-                        <label for="male">Männlich</label>
-                        <input type="radio" name="gender" id="female" value="f" />
-                        <label for="female">Weiblich</label>
+                        @helper.inputRadioGroup(form("gender"), options = Seq(("m"->"Männlich"),
+                    													 ("f"->("Weiblich"))))
                     </fieldset>
-                    
-                    
                 </fieldset>
                 <fieldset>
                     <legend>Spielerdaten</legend>
-                    <label for="avatar">Avatar:</label>
-                    <select id="avatar" name="avatar">
-                        <option value="aldrich-killian">Aldrich Killian</option>
-                        <option value="beetle">Beetle</option>
-						<option value="black-widow">Black Widow</option>
-						<option value="captain-america">Captain America</option>
-						<option value="cyclops">Cyclops</option>
-						<option value="deadpool">Deadpool</option>
-						<option value="doctor-doom">Doctor Doom</option>
-						<option value="doctor-octopus">Doctor Octopus</option>
-						<option value="drax">Drax</option>
-						<option value="electro">Electro</option>
-						<option value="extremis-soldier">Extremis Soldier</option>
-						<option value="falcon">Falcon</option>
-						<option value="gamora">Gamora</option>
-						<option value="green-goblin">Green Goblin</option>
-						<option value="groot">Groot</option>
-						<option value="hawkeye">Hawkeye</option>
-						<option value="hulk">Hulk</option>
-						<option value="hydra-henchman">Hydra Henchman</option>
-						<option value="iron-fist">Iron Fist</option>
-						<option value="iron-man">Iron Man</option>
-						<option value="j-jonah-jameson">J. Jonah Jameson</option>
-						<option value="loki">Loki</option>
-						<option value="magneto">Magneto</option>
-						<option value="mary-jane-watson">Mary Jane Watson</option>
-						<option value="modok">MODOK</option>
-						<option value="nebula">Nebula</option>
-						<option value="nick-fury">Nick Fury</option>
-						<option value="nova">Nova</option>
-						<option value="pepper-potts">Pepper Potts</option>
-						<option value="power-man">Power Man</option>
-						<option value="red-skull">Red Skull</option>
-						<option value="rocket">Rocket Raccoon</option>
-						<option value="ronan">Ronan</option>
-						<option value="spiderman">Spiderman</option>
-						<option value="starlord">Starlord</option>
-						<option value="taskmaster">Taskmaster</option>
-						<option value="the-mandarin">The Mandarin</option>
-						<option value="thor">Thor</option>
-						<option value="tony-stark">Tony Stark</option>
-						<option value="venom">Venom</option>
-						<option value="war-machine">War Machine</option>
-						<option value="wolverine">Wolverine</option>
-                    </select>
+                    @helper.select(form("avatar"), options = option(
+                        ("aldrich-killian"->"Aldrich Killian"),
+                        ("beetle"->"Beetle"),
+						("black-widow"->"Black Widow"),
+						("captain-america"->"Captain America"),
+						("cyclops"->"Cyclops"),
+						("deadpool"->"Deadpool"),
+						("doctor-doom"->"Doctor Doom"),
+						("doctor-octopus"->"Doctor Octopus"),
+						("drax"->"Drax"),
+						("electro"->"Electro"),
+						("extremis-soldier"->"Extremis Soldier"),
+						("falcon"->"Falcon"),
+						("gamora"->"Gamora"),
+						("green-goblin"->"Green Goblin"),
+						("groot"->"Groot"),
+						("hawkeye"->"Hawkeye"),
+						("hulk"->"Hulk"),
+						("hydra-henchman"->"Hydra Henchman"),
+						("iron-fist"->"Iron Fist"),
+						("iron-man"->"Iron Man"),
+						("j-jonah-jameson"->"J. Jonah Jameson"),
+						("loki"->"Loki"),
+						("magneto"->"Magneto"),
+						("mary-jane-watson"->"Mary Jane Watson"),
+						("modok"->"MODOK"),
+						("nebula"->"Nebula"),
+						("nick-fury"->"Nick Fury"),
+						("nova"->"Nova"),
+						("pepper-potts"->"Pepper Potts"),
+						("power-man"->"Power Man"),
+						("red-skull"->"Red Skull"),
+						("rocket"->"Rocket Raccoon"),
+						("ronan"->"Ronan"),
+						("spiderman"->"Spiderman"),
+						("starlord"->"Starlord"),
+						("taskmaster"->"Taskmaster"),
+						("the-mandarin"->"The Mandarin"),
+						("thor"->"Thor"),
+						("tony-stark"->"Tony Stark"),
+						("venom"->"Venom"),
+						("war-machine"->"War Machine"),
+						("wolverine"->"Wolverine")), "Avatar")
 					
-					<label for="username">Benutzername*:</label>
-                    <input id="username" type="text" required="required" pattern="\w{4,8}" name="username"/>
+					@helper.inputText(registerForm("username"))
+					@for(error <- registerForm("username").errors){
                     <div id="error_msg_username" class="hide" role="alert">Der Benutzername muss mindestens 4 Zeichen und darf maximal 8 Zeichen enthalten.</div>
+                    }
                     
-                    <label for="password">Passwort*:</label>
-                    <input id="password" type="password" required="required" pattern="\w{4,8}" name="password"/>
+                    @helper.inputPassword(registerForm("password"))
+                    @for(error <- registerForm("password").errors){
                     <div id="error_msg_password" class="hide" role="alert">Das Passwort muss mindestens 4 Zeichen und darf maximal 8 Zeichen enthalten.</div>
-                    <input class="greenlink formlink" type="submit" value="Registrieren" accesskey="s"/>
+                    }
+                    <button class="greenlink formlink" type="submit" value="Registrieren" accesskey="s">Registrieren</button>
                     <p id="requiredhint">Mit "*" gekennzeichnete Felder sind Pflichtfelder</p>
                 </fieldset>
-            </form>
+            }
         </div>
 
         <!-- Footer -->

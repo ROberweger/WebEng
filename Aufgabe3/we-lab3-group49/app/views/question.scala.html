@@ -1,5 +1,5 @@
 @(game: at.ac.tuwien.big.we15.lab2.api.JeopardyGame)
-<htm>
+<html>
     <head>
     	<meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +37,7 @@
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername">@game.getLeader().getUser().getAvatar().getName() @if(game.isHumanPlayer(game.getLeader())) { (Du)}</td>
+                     <td class="playername">@game.getLeader().getUser().getAvatar().getName() @if(game.isHumanPlayer(game.getLeader().getUser())) { (Du)}</td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
@@ -51,15 +51,15 @@
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
-                     <td class="playername">@game.getSecond().getUser().getAvatar().getName() @if(game.isHumanPlayer(game.getSecond())) {(Du)}</td>
+                     <td class="playername">@game.getSecond().getUser().getAvatar().getName() @if(game.isHumanPlayer(game.getSecond().getUser())) {(Du)}</td>
                   </tr>
                   <tr>
                      <th class="accessibility">Spielerpunkte</th>
-                     <td class="playerpoints">game.getSecond().getProfit() €</td>
+                     <td class="playerpoints">@game.getSecond().getProfit() €</td>
                   </tr>
                </table>
             </section>
-            <p id="round">Fragen: game.getHumanPlayer().getAnsweredQuestions().size() / game.getMaxQuestions()</p>
+            <p id="round">Fragen: @game.getHumanPlayer().getAnsweredQuestions().size() / @game.getMaxQuestions()</p>
          </section>
             
       <!-- Question -->
@@ -69,9 +69,7 @@
                <p id="questiontype">@game.getHumanPlayer().getChosenQuestion().getCategory.getName() für € @game.getHumanPlayer().getChosenQuestion().getValue() </p>
                <p id="questiontext">@game.getHumanPlayer().getChosenQuestion().getText() </p>
                <ul id="answers">
-				@for(answer <- @game.getHumanPlayer().getChosenQuestion().getAllAnswers()){
-                  <li><input name="answers" id="answer_@answer.getId()" value="@answer.getId()" type="checkbox"/><label class="tile clickable" for="answer_@answer.getId()">@answer.getAnswer()</label></li>
-				}
+				
                </ul>
                <input id="timeleftvalue" type="hidden" value="100"/>
                <input class="greenlink formlink clickable" name="answer_submit" id="next" type="submit" value="antworten" accesskey="s"/>

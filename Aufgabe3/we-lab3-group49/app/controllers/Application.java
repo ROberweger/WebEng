@@ -23,12 +23,13 @@ public class Application extends Controller {
     	return ok(jeopardy.render(game));
     }
     
-    public static Result login(){
+    //public static Result login(){
     	//https://www.playframework.com/documentation/2.2.x/JavaGuide4
     	//return ok (login.render(Form.form(User.class)));
-    }
+    	//return ok();
+    //}
     
-    public static Result authenticate() {
+    //public static Result authenticate() {
         //https://www.playframework.com/documentation/2.2.x/JavaGuide4
-    }
+    //}
 }

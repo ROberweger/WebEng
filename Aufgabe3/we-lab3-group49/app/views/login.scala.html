@@ -1,10 +1,10 @@
-﻿@form: Form[Application.Login]
+﻿@ (loginForm : Form[at.ac.tuwien.big.we15.lab2.api.User]))
 <html>
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Business Informatics Group Jeopardy! - Login</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/base.css")">
+       	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/base.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/screen.css")">
         <script src="@routes.Assets.at("javascripts/jquery.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/framework.js")" type="text/javascript"></script>
@@ -25,14 +25,20 @@
             <section id="login" aria-labelledby="loginheading">
                <h2 id="loginheading" class="accessibility">Login</h2>
                
-                @helper.form(routes.Application.authenticate){
+                @helper.form(action = routes.Application.authenticate){
                     <fieldset>
                         <legend id="logindata">Login</legend>
-                        <label for="username">Benutzername:</label>
-                        <input name="username" id="username" type="text" required="required"/>
-                        <label for="password">Passwort:</label>
-                        <input name="password" id="password" type="password" required="required"/>
-                        <input name="login" id="loginsubmit" class="greenlink formlink clickable" type="submit" value="Anmelden"/>
+                        @helper.inputText(loginForm("username"))
+						@for(error <- loginForm("username").errors){
+							<div id="error_msg_username" class="hide" role="alert"> @error.message</div>
+						}
+						
+						@helper.inputPassword(loginForm("password"))
+						@for(error <- loginForm("username").errors){
+							<div id="error_msg_password" class="hide" role="alert"> @error.message</div>
+						}
+						
+                        <button name="login" id="loginsubmit" class="greenlink formlink clickable" type="submit" name="action">Anmelden</button>
                     </fieldset>
                     }
             </section>
