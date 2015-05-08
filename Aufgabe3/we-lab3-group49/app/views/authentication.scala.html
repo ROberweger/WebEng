@@ -1,4 +1,4 @@
-﻿@form: Form[Application.Login]
+﻿@*@form: Form[Application.Login]*@
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -25,7 +25,7 @@
             <section id="login" aria-labelledby="loginheading">
                <h2 id="loginheading" class="accessibility">Login</h2>
                
-                @helper.form(routes.Application.authenticate){
+                @helper.form(routes.Jeopardy.login){
                     <fieldset>
                         <legend id="logindata">Login</legend>
                         <label for="username">Benutzername:</label>
@@ -40,7 +40,7 @@
             <section id="registerforward" aria-labelledby="registerheading">
                 <h2 id="registerheading" class="accessibility">Registrierung</h2>
                 <p id="registerhint">Nicht registriert?</p>
-                <a class="contentlink orangelink" title="Klicke hier um dich zu registrieren" href="register.xhtml" accesskey="r">Zur Registrierung</a>
+                <a class="contentlink orangelink" title="Klicke hier um dich zu registrieren" href="@routes.Jeopardy.registration" accesskey="r">Zur Registrierung</a>
             </section>
         </div>
 

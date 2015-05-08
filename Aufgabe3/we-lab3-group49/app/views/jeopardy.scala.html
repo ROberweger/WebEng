@@ -22,7 +22,7 @@
 		<nav role="navigation" aria-labelledby="navheading">
 			<h2 id="navheading" class="accessibility">Navigation</h2>
 			<ul>
-				<li><a class="orangelink navigationlink" id="logoutlink" title="Klicke hier um dich abzumelden" href="#" accesskey="l">Abmelden</a></li>
+				<li><a class="orangelink navigationlink" id="logoutlink" title="Klicke hier um dich abzumelden" href="@routes.Jeopardy.logout" accesskey="l">Abmelden</a></li>
 			</ul>
 		</nav>
       
@@ -33,7 +33,7 @@
             <h2 id="gameinfoinfoheading" class="accessibility">Spielinformationen</h2>
             <section id="firstplayer" class="playerinfo leader" aria-labelledby="firstplayerheading">
                <h3 id="firstplayerheading" class="accessibility">Führender Spieler</h3>
-               <img class="avatar" src="@game.getLeader().getUser().getAvatar().getImageHead()" alt="Spieler-Avatar @game.getLeader().getUser().getAvatar().getName()" />
+               <img class="avatar" src="@routes.Assets.at("images/avatar/" + game.getLeader().getUser().getAvatar().getImageHead())" alt="Spieler-Avatar @game.getLeader().getUser().getAvatar().getName()" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
@@ -48,7 +48,7 @@
             </section>
             <section id="secondplayer" class="playerinfo" aria-labelledby="secondplayerheading">
                <h3 id="secondplayerheading" class="accessibility">Zweiter Spieler</h3>
-               <img class="avatar" src="@game.getSecond().getUser().getAvatar().getImageHead()" alt="Spieler-Avatar @game.getSecond().getUser().getAvatar().getName()" />
+               <img class="avatar" src="@routes.Assets.at("images/avatar/" + game.getSecond().getUser().getAvatar().getImageHead())" alt="Spieler-Avatar @game.getSecond().getUser().getAvatar().getName()" />
                <table>
                   <tr>
                      <th class="accessibility">Spielername</th>
@@ -60,20 +60,22 @@
                   </tr>
                </table>
             </section>
-            <p id="round">Fragen: @game.getHumanPlayer().getAnsweredQuestions().size() / 10</p>
+            <p id="round">Fragen: @game.getHumanPlayer().getAnsweredQuestions().size() / @game.getMaxQuestions()</p>
          </section>
 
          <!-- Question -->
          <section id="question-selection" aria-labelledby="questionheading">
             <h2 id="questionheading" class="black accessibility">Jeopardy</h2>
-			 @if(!game.isRoundStart()){
+			@if(game.getHumanPlayer().getAnsweredQuestions().size() > 0){
             <p class="user-info @if(game.getHumanPlayer().getLatestProfitChange()>0) { positive-change }else{ negative-change } "> Du hast  @if(game.getHumanPlayer().getLatestProfitChange()>0) { richtig } else{ falsch} geantwortet: @game.getHumanPlayer().getLatestProfitChange() €</p>
             
-			<p class="user-info @if(game.getMarvinPlayer().getLatestProfitChange()>0) { positive-change }else{ negative-change }" > @game.getMarvinPlayer().getUser().getAvatar().getName()  hat " @if(game.getMarvinPlayer().getLatestProfitChange()>0) { "richtig" } else{ "falsch" } geantwortet: @game.getMarvinPlayer().getLatestProfitChange() €</p>
+			<p class="user-info @if(game.getMarvinPlayer().getLatestProfitChange()>0) { positive-change }else{ negative-change }" > @game.getMarvinPlayer().getUser().getAvatar().getName()  hat @if(game.getMarvinPlayer().getLatestProfitChange()>0) { richtig } else{ falsch } geantwortet: @game.getMarvinPlayer().getLatestProfitChange() €</p>
 			
+			@if(game.getMarvinPlayer().getChosenQuestion() != null) {
             <p class="user-info">@game.getMarvinPlayer().getUser().getAvatar().getName() hat @game.getMarvinPlayer().getChosenQuestion().getCategory().getName() für € @game.getMarvinPlayer().getChosenQuestion().getValue() gewählt.</p>
             }
-            <form id="questionform" action="jeopardy" method="post">
+            }
+            @helper.form(action = routes.Jeopardy.question){
                <fieldset>
                <legend class="accessibility">Fragenauswahl</legend>
                
@@ -89,7 +91,7 @@
 				}               
                </fieldset>               
                <input class="greenlink formlink clickable" name="question_submit" id="next" type="submit" value="wählen" accesskey="s" />
-            </form>
+            }
          </section>
          
          <section id="lastgame" aria-labelledby="lastgameheading">
