@@ -1,4 +1,3 @@
-﻿﻿@*@form: Form[Application.Login]*@
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -11,8 +10,8 @@
     </head>
     
     <body id="login-page">
-      <a class="accessibility" href="#login">Zum Login springen</a>
-	  <a class="accessibility" title="Klicke hier um dich zu registrieren" href="register.xhtml" accesskey="r">Registrieren</a>  
+      <a class="accessibility" href="#login">@Messages("authentication.jumpToLogin")</a>
+	  <a class="accessibility" title="@Messages("authentication.clickToRegister")" href="@routes.Jeopardy.registration" accesskey="r">@Messages("registration.register")</a>  
       <!-- Header -->
       <header role="banner" aria-labelledby="bannerheading">
          <h1 id="bannerheading">
@@ -28,25 +27,19 @@
                 @helper.form(routes.Jeopardy.login){
                     <fieldset>
                         <legend id="logindata">Login</legend>
-                        @helper.inputText(loginForm("username"))
-						@for(error <- loginForm("username").errors){
-							<div id="error_msg_username" class="hide" role="alert"> @error.message</div>
-						}
-						
-						@helper.inputPassword(loginForm("password"))
-						@for(error <- loginForm("username").errors){
-							<div id="error_msg_password" class="hide" role="alert"> @error.message</div>
-						}
-						
-                        <button name="login" id="loginsubmit" class="greenlink formlink clickable" type="submit" name="action">Anmelden</button>
+                        <label for="username">@Messages("authentication.username"):</label>
+                        <input name="username" id="username" type="text" required="required"/>
+                        <label for="password">@Messages("authentication.password"):</label>
+                        <input name="password" id="password" type="password" required="required"/>
+                        <input name="login" id="loginsubmit" class="greenlink formlink clickable" type="submit" value="@Messages("authentication.login")"/>
                     </fieldset>
                     }
             </section>
             <!-- Register section -->
             <section id="registerforward" aria-labelledby="registerheading">
-                <h2 id="registerheading" class="accessibility">Registrierung</h2>
-                <p id="registerhint">Nicht registriert?</p>
-                <a class="contentlink orangelink" title="Klicke hier um dich zu registrieren" href="@routes.Jeopardy.registration" accesskey="r">Zur Registrierung</a>
+                <h2 id="registerheading" class="accessibility">@Messages("registration.registration")</h2>
+                <p id="registerhint">@Messages("authentication.notRegistered")?</p>
+                <a class="contentlink orangelink" title="@Messages("authentication.clickToRegister")" href="@routes.Jeopardy.registration" accesskey="r">@Messages("authentication.toRegistration")</a>
             </section>
         </div>
 

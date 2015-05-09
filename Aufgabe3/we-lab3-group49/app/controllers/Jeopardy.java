@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+import models.Login;
 import at.ac.tuwien.big.we15.lab2.api.JeopardyFactory;
 import at.ac.tuwien.big.we15.lab2.api.JeopardyGame;
 import at.ac.tuwien.big.we15.lab2.api.impl.PlayJeopardyFactory;
@@ -35,8 +36,13 @@ public class Jeopardy extends Controller {
 	}
 	
 	public static Result login() {
-		//TODO: check user
-		session(SESSION_USERNAME, "roland");
+		DynamicForm form = Form.form().bindFromRequest();
+		String username = form.get("username");
+		String password = form.get("password");
+		//TODO: check login
+		
+		//If login is valid -> set username in session
+		session(SESSION_USERNAME, username);
 		return redirect(routes.Jeopardy.jeopardyGet());
 	}
 	
@@ -49,7 +55,7 @@ public class Jeopardy extends Controller {
 	@Security.Authenticated(Secure.class)
 	public static Result jeopardyGet() {
 		JeopardyFactory factory = new PlayJeopardyFactory("data." + lang().code() + ".json");
-		JeopardyGame game = factory.createGame("testuser"); //TODO: user real username
+		JeopardyGame game = factory.createGame(session(SESSION_USERNAME));
 		Cache.set(CACHE_GAME, game);
 		return ok(jeopardy.render(game));
 	}

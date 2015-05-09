@@ -1,4 +1,4 @@
-@(registerForm: Form[at.ac.tuwien.big.we15.lab2.api.Userdata]))
+@*@(registerForm: Form[at.ac.tuwien.big.we15.lab2.api.Userdata]))*@
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -34,19 +34,19 @@
             @helper.form(action = routes.Jeopardy.authentication){
                 <fieldset>
                     <legend>Persönliche Daten</legend>
-                    @helper.inputText(registerForm("firstname"))
+                    @*@helper.inputText(registerForm("firstname"))
                     
                     @helper.inputText(registerForm("lastname"))
                     
                     @helper.inputDate(registerForm("birthdate"))
                     
-                    @for(error <- registerForm("birthdate").errors)){
+                    @for(error <- registerForm("birthdate").errors){
                     <div id="error_msg_birthdate" class="hide" role="alert">Verwenden Sie bitte folgendes Datumsformat: dd.mm.yyyy (z.B. 24.12.2010).</div>
                     }
                     
                     <label>@Messages("registration.gender"):</label>
                     <fieldset class="inputset">
-                        @helper.inputRadioGroup(form("gender"), options = Seq(("m"->"Männlich"),
+                        @helper.inputRadioGroup(registerForm("gender"), options = Seq(("m"->"Männlich"),
                     													 ("f"->("Weiblich"))))
                     </fieldset>
                 </fieldset>
@@ -104,7 +104,7 @@
                     @helper.inputPassword(registerForm("password"))
                     @for(error <- registerForm("password").errors){
                     <div id="error_msg_password" class="hide" role="alert">Das Passwort muss mindestens 4 Zeichen und darf maximal 8 Zeichen enthalten.</div>
-                    }
+                    }*@
                     <button class="greenlink formlink" type="submit" value="Registrieren" accesskey="s">Registrieren</button>
                     <p id="requiredhint">Mit "*" gekennzeichnete Felder sind Pflichtfelder</p>
                 </fieldset>
