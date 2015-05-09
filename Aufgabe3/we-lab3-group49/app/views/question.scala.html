@@ -1,5 +1,5 @@
 @(game: at.ac.tuwien.big.we15.lab2.api.JeopardyGame)
-<htm>
+<html>
     <head>
     	<meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -62,8 +62,8 @@
             <p id="round">Fragen: @game.getHumanPlayer().getAnsweredQuestions().size() / @game.getMaxQuestions()</p>
          </section>
             
-      <!-- Question -->
-      <section id="question" aria-labelledby="questionheading">
+		<!-- Question -->
+		<section id="question" aria-labelledby="questionheading">
       		@helper.form(action = routes.Jeopardy.jeopardyPost){
                <h2 id="questionheading" class="accessibility">Frage</h2>
                <p id="questiontype">@game.getHumanPlayer().getChosenQuestion().getCategory.getName() für € @game.getHumanPlayer().getChosenQuestion().getValue() </p>
@@ -76,7 +76,7 @@
                <input id="timeleftvalue" type="hidden" value="100"/>
                <input class="greenlink formlink clickable" name="answer_submit" id="next" type="submit" value="antworten" accesskey="s"/>
             }
-         </section>
+		</section>
             
          <section id="timer" aria-labelledby="timerheading">
             <h2 id="timerheading" class="accessibility">Timer</h2>
