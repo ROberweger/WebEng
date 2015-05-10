@@ -1,4 +1,5 @@
-@*@(registerForm: Form[at.ac.tuwien.big.we15.lab2.api.Userdata]))*@
+@(registerForm: Form[Registration])
+
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -11,14 +12,12 @@
     </head>
     <body id="register-page">
       <a title="Zur Registrierung springen" class="accessibility" href="#register">@Messages("registration.jumpToRegistration")</a>
-      
       <!-- Header -->
       <header role="banner" aria-labelledby="bannerheading">
          <h1 id="bannerheading">
             <span class="accessibility">Business Informatics Group </span><span class="gametitle">Jeopardy!</span>
          </h1>
       </header>
-      
       <!-- Navigation -->
 		<nav role="navigation" aria-labelledby="navheading">
 			<h2 id="navheading" class="accessibility">Navigation</h2>
@@ -26,234 +25,110 @@
 				<li><a class="orangelink navigationlink" id="loginlink" title="@Messages("registration.clickToRegister")" href="@routes.Jeopardy.authentication" accesskey="l">@Messages("authentication.login")</a></li>
 			</ul>
 		</nav>
-      
+
       <!-- Content -->
-      <div id="register" role="main"> 
-            <!-- Register section -->
+        <div role="main">
+        <!-- Register section -->
+             <section id="register" aria-labelledby="registerHeader">
             <h2 id="registerheading" class="accessibility">Registrierung</h2>
-            @helper.form(action = routes.Jeopardy.authentication){
+            @helper.form(action = routes.Jeopardy.registration()){
                 <fieldset>
-                    <legend>Persönliche Daten</legend>
-                    @*@helper.inputText(registerForm("firstname"))
-                    
-                    @helper.inputText(registerForm("lastname"))
-                    
-                    @helper.inputDate(registerForm("birthdate"))
-                    
-                    @for(error <- registerForm("birthdate").errors){
-                    <div id="error_msg_birthdate" class="hide" role="alert">Verwenden Sie bitte folgendes Datumsformat: dd.mm.yyyy (z.B. 24.12.2010).</div>
-                    }
-                    
-                    <label>@Messages("registration.gender"):</label>
+
+                    <div style="width: 50%; float:center; min-width:500px; margin-top: 0px; margin-left:25%">
+                   <legend>Persönliche Daten</legend>
+
+                            @helper.inputText(registerForm("firstName"),
+                            '_label -> Messages("Vorname:"),
+                            '_required -> false)
+
+                                @helper.inputText(registerForm("lastName"),
+                                    '_label -> Messages("Nachname:"),
+                                    '_required -> false)
+
+
+                    @helper.inputDate(registerForm("birthdate"),
+                        '_label -> Messages("Geburtstag:"),
+                        '_required -> false)
+
+
+
+
+                    <label>@Messages("Geschlecht"):</label>
                     <fieldset class="inputset">
-                        @helper.inputRadioGroup(registerForm("gender"), options = Seq(("m"->"Männlich"),
-                    													 ("f"->("Weiblich"))))
+                        @helper.inputRadioGroup(registerForm("gender"), options = Seq(("male"->"Männlich"),
+                    																 ("female"->("Weiblich"))),
+                    '_label -> Messages(""),
+                            '_required -> false)
                     </fieldset>
-                </fieldset>
-                <fieldset>
-                    <legend>Spielerdaten</legend>
-                    @helper.select(form("avatar"), options = option(
-                        ("aldrich-killian"->"Aldrich Killian"),
-                        ("beetle"->"Beetle"),
-						("black-widow"->"Black Widow"),
-						("captain-america"->"Captain America"),
-						("cyclops"->"Cyclops"),
-						("deadpool"->"Deadpool"),
-						("doctor-doom"->"Doctor Doom"),
-						("doctor-octopus"->"Doctor Octopus"),
-						("drax"->"Drax"),
-						("electro"->"Electro"),
-						("extremis-soldier"->"Extremis Soldier"),
-						("falcon"->"Falcon"),
-						("gamora"->"Gamora"),
-						("green-goblin"->"Green Goblin"),
-						("groot"->"Groot"),
-						("hawkeye"->"Hawkeye"),
-						("hulk"->"Hulk"),
-						("hydra-henchman"->"Hydra Henchman"),
-						("iron-fist"->"Iron Fist"),
-						("iron-man"->"Iron Man"),
-						("j-jonah-jameson"->"J. Jonah Jameson"),
-						("loki"->"Loki"),
-						("magneto"->"Magneto"),
-						("mary-jane-watson"->"Mary Jane Watson"),
-						("modok"->"MODOK"),
-						("nebula"->"Nebula"),
-						("nick-fury"->"Nick Fury"),
-						("nova"->"Nova"),
-						("pepper-potts"->"Pepper Potts"),
-						("power-man"->"Power Man"),
-						("red-skull"->"Red Skull"),
-						("rocket"->"Rocket Raccoon"),
-						("ronan"->"Ronan"),
-						("spiderman"->"Spiderman"),
-						("starlord"->"Starlord"),
-						("taskmaster"->"Taskmaster"),
-						("the-mandarin"->"The Mandarin"),
-						("thor"->"Thor"),
-						("tony-stark"->"Tony Stark"),
-						("venom"->"Venom"),
-						("war-machine"->"War Machine"),
-						("wolverine"->"Wolverine")), "Avatar")
+                    @helper.select(registerForm("avatar"), options = Seq(
+                        ("ALDRICH_KILLIAN"->"Aldrich Killian"),
+                        ("BEETLE"->"Beetle"),
+						("BLACK_WIDOW"->"Black Widow"),
+						("CAPTAIN_AMERICA"->"Captain America"),
+						("CYCLOPS"->"Cyclops"),
+						("DEADPOOL"->"Deadpool"),
+						("DOCTOR_DOOM"->"Doctor Doom"),
+						("DOCTOR_OCTOPUS"->"Doctor Octopus"),
+						("DRAX"->"Drax"),
+						("ELECTRO"->"Electro"),
+						("EXTREMIS_SOLDIER"->"Extremis Soldier"),
+						("FALCON"->"Falcon"),
+						("GAMORA"->"Gamora"),
+						("GREEN_GOBLIN"->"Green Goblin"),
+						("GROOT"->"Groot"),
+						("HAWKEYE"->"Hawkeye"),
+						("HULK"->"Hulk"),
+						("HYDRA_HENCHMAN"->"Hydra Henchman"),
+						("IRON_FIST"->"Iron Fist"),
+						("IRON_MAN"->"Iron Man"),
+						("J_JONAH_JAMESON"->"J. Jonah Jameson"),
+						("LOKI"->"Loki"),
+						("MAGNETO"->"Magneto"),
+						("MARY_JANE_WATSON"->"Mary Jane Watson"),
+						("MODOK"->"MODOK"),
+						("NEBULA"->"Nebula"),
+						("NICK_FURY"->"Nick Fury"),
+						("NOVA"->"Nova"),
+						("PEPPER_POTTS"->"Pepper Potts"),
+						("POWER_MAN"->"Power Man"),
+						("RED_SKULL"->"Red Skull"),
+						("ROCKET_RACCOON"->"Rocket Raccoon"),
+						("RONAN"->"Ronan"),
+						("SPIDERMAN"->"Spiderman"),
+						("STARLORD"->"Starlord"),
+						("Taskmaster"->"Taskmaster"),
+						("THE_MANDARIN"->"The Mandarin"),
+						("THOR"->"Thor"),
+						("TONY_STARK"->"Tony Stark"),
+						("VENOM"->"Venom"),
+						("WAR_MACHINE"->"War Machine"),
+						("WOLVERINE"->"Wolverine")),
+                        '_label -> Messages("Avatar*:"),
+                        '_showConstraints -> false,
+                            '_required -> false)
 					
-					@helper.inputText(registerForm("username"))
-					@for(error <- registerForm("username").errors){
-                    <div id="error_msg_username" class="hide" role="alert">Der Benutzername muss mindestens 4 Zeichen und darf maximal 8 Zeichen enthalten.</div>
-                    }
+					@helper.inputText(registerForm("userName"),
+                        '_label -> Messages("Username*:"),
+                        '_showConstraints -> false)
+
                     
-                    @helper.inputPassword(registerForm("password"))
-                    @for(error <- registerForm("password").errors){
-                    <div id="error_msg_password" class="hide" role="alert">Das Passwort muss mindestens 4 Zeichen und darf maximal 8 Zeichen enthalten.</div>
-                    }*@
-                    <button class="greenlink formlink" type="submit" value="Registrieren" accesskey="s">Registrieren</button>
+                    @helper.inputPassword(registerForm("password"),
+                    '_label -> Messages("Passwort*:"),
+                        '_showConstraints -> false)
+
                     <p id="requiredhint">Mit "*" gekennzeichnete Felder sind Pflichtfelder</p>
+
+                    <input name="register" id="registerForm" class="greenlink formlink" type="submit" value="@Messages("authentication.toRegistration")"/>
+                    </div>
+                    <!--<a class="greenlink formlink" title="@Messages("New")" href="@routes.Jeopardy.registration()" accesskey="r">@Messages("authentication.toRegistration")/>-->
                 </fieldset>
             }
+          </section>
         </div>
 
         <!-- Footer -->
         <footer role="contentinfo">© 2015 BIG Jeopardy</footer>
         
-        <script type="text/javascript">
-            //<![CDATA[
-            
-            $(document).ready(function() {
-                if (areAllFieldsValid()) {
-                    $('input[type="submit"]').removeAttr('disabled');
-                }else{
-                    $('input[type="submit"]').attr('disabled', 'disabled');
-                }
-            });
-            
-            function areAllFieldsValid() {
-                var valid;
-                if(hasFormValidation()){
-                    valid = $('form')[0].checkValidity();
-                }else{
-                    valid = !(isUsernameInvalid($("#username").val()) || isPasswordInvalid($("#password").val()));
-                }
-                if(!hasNativeDateInput()){
-                    valid = valid && !isBirthdayInvalid("birthdate");
-                }
-                return valid;
-            }
-            
-            function updateSubmitState() {
-                if (areAllFieldsValid()) {
-                    $('input[type="submit"]').removeAttr('disabled');
-                }else{
-                    $('input[type="submit"]').attr('disabled', 'disabled');
-                }
-            }
 
-			function updateFieldValidity(isInvalid, fieldSelector, messageSelector) {
-                if(isInvalid) {
-                  $(fieldSelector).addClass('error');
-                  $(messageSelector).removeClass('hide');
-                } else {
-                   $(fieldSelector).removeClass('error');
-                   $(messageSelector).addClass('hide');
-                }
-            }
-            
-			/*
-             * Birth Date
-             */
-            $("#birthdate").keyup(function (event) {
-                if(hasFormValidation()){
-                    this.setCustomValidity("");
-                }
-                
-                var isInvalid;
-                if(!hasFormValidation() || !hasNativeDateInput()){
-                    isInvalid = isBirthdayInvalid("birthdate");
-                }else{
-                    isInvalid = !this.validity.valid;
-                }
-                
-                updateFieldValidity(isInvalid, "#birthdate", "#error_msg_birthdate");
-                updateSubmitState();
-            });
-            
-			/*
-             * Checks if the input with the given id is a valid birthdate or not
-             */
-            function isBirthdayInvalid(id){
-                re = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
-                value = getNormalizedDateString("#"+id);
-                console.log(value);
-                if (value != '') {
-                    if (regs = value.match(re)) {
-                        if (regs[1] < 1 || regs[1] > 31) {
-                            return true;
-                        }
-                        if (regs[2] < 1 || regs[2] > 12) {
-                            return true;
-                        }
-                        if (regs[3] < 1902 || regs[3] > (new Date()).getFullYear() + 100) {
-                            return true;
-                        }
-                        return false;
-                    }else{
-                        return true;
-                    }
-                } else {
-                    return false;
-                }
-            }
-            
-            /*
-             * User Name
-             */
-            $("#username").keyup(function (event){
-                if(hasFormValidation()){
-                    this.setCustomValidity("");
-                }
-                
-                var isInvalid;
-                if(!hasFormValidation()){
-                    isInvalid = isUsernameInvalid($(event.target).val());
-                }else{
-                    isInvalid = !this.validity.valid;
-                }
-                
-                updateFieldValidity(isInvalid, "#username", "#error_msg_username");                
-                updateSubmitState();
-            });
-            
-            /*
-             *  checks if the given input value is a valid username or not
-             */
-            function isUsernameInvalid(value) {
-                return value.length < 4 || value.length > 8;
-            }
-            
-			/*
-             * Password
-             */
-            $("#password").keyup(function (event){
-                if(hasFormValidation()){
-                    this.setCustomValidity("");
-                }
-                
-                var isInvalid;
-                if(!hasFormValidation()){
-                    isInvalid = isPasswordInvalid($(event.target).val());
-                }else{
-                    isInvalid = !this.validity.valid;
-                }
-                
-                updateFieldValidity(isInvalid, "#password", "#error_msg_password");                
-                updateSubmitState();
-            });
-            
-            /*
-             *   checks if the given input value is a valid username or not
-             */
-            function isPasswordInvalid(value) {
-                return value.length < 4 || value.length > 8;
-            }
-            //]]>
-        </script>
     </body>
 </html>

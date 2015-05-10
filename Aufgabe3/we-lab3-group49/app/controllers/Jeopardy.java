@@ -1,38 +1,52 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-
-import models.Login;
 import at.ac.tuwien.big.we15.lab2.api.JeopardyFactory;
 import at.ac.tuwien.big.we15.lab2.api.JeopardyGame;
 import at.ac.tuwien.big.we15.lab2.api.impl.PlayJeopardyFactory;
-import play.api.i18n.Lang;
+import models.Registration;
 import play.cache.Cache;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.db.jpa.JPA;
+
+import play.db.jpa.Transactional;
 import play.i18n.Messages;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.authentication;
-import views.html.jeopardy;
-import views.html.registration;
-import views.html.question;
-import views.html.winner;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
 
 public class Jeopardy extends Controller {
 	//Parameter names
 	public static final String SESSION_USERNAME = "user";
 	public static final String CACHE_GAME = "game";
 
+	@play.db.jpa.Transactional
 	public static Result registration() {
-		return ok(registration.render());
+		Form<Registration> form = Form.form(Registration.class).bindFromRequest();
+		if (form.hasErrors()) {
+			return badRequest(views.html.registration.render(form));
+		} else {
+			Registration registration = form.get();
+			if(getRegistratonByUserName(registration.getUserName())== null) {
+				JPA.em().persist(registration);
+				return authentication();
+			}
+			else{
+				//return forbidden(routes.Jeopardy.registration());
+				return forbidden("Bitte geben sie einen anderen Username an");
+			}
+		}
+	}
+	public static Result registrationRender(){
+		return ok(views.html.registration.render(Form.form(Registration.class)));
 	}
 	
 	public static Result authentication() {
-		return ok(authentication.render());
+		return ok(views.html.authentication.render());
 	}
 	
 	public static Result login() {
@@ -40,10 +54,15 @@ public class Jeopardy extends Controller {
 		String username = form.get("username");
 		String password = form.get("password");
 		//TODO: check login
-		
-		//If login is valid -> set username in session
-		session(SESSION_USERNAME, username);
-		return redirect(routes.Jeopardy.jeopardyGet());
+		Registration r = getRegistratonByUserName(username);
+		if((r != null) &&(r.comparePassword(password))){
+			session(SESSION_USERNAME, username);
+			return redirect(routes.Jeopardy.jeopardyGet());
+		}
+		else {
+			return unauthorized("Falscher Username oder Passwort");
+		}
+
 	}
 	
 	@Security.Authenticated(Secure.class)
@@ -57,7 +76,7 @@ public class Jeopardy extends Controller {
 		JeopardyFactory factory = new PlayJeopardyFactory("data." + lang().code() + ".json");
 		JeopardyGame game = factory.createGame(session(SESSION_USERNAME));
 		Cache.set(CACHE_GAME, game);
-		return ok(jeopardy.render(game));
+		return ok(views.html.jeopardy.render(game));
 	}
 	
 	@Security.Authenticated(Secure.class)
@@ -77,9 +96,9 @@ public class Jeopardy extends Controller {
 		game.answerHumanQuestion(answers);
 		
 		if(game.isGameOver())
-			return ok(winner.render(game));
+			return ok(views.html.winner.render(game));
 		else
-			return ok(jeopardy.render(game));
+			return ok(views.html.jeopardy.render(game));
 	}
 	
 	@Security.Authenticated(Secure.class)
@@ -89,9 +108,20 @@ public class Jeopardy extends Controller {
 		String selectedQuestion = selectionform.get("question_selection");
 		//If no question was selected, render jeopardy again
 		if(selectedQuestion == null)
-			return ok(jeopardy.render(game));
+			return ok(views.html.jeopardy.render(game));
 		
 		game.chooseHumanQuestion(Integer.valueOf(selectedQuestion));
-		return ok(question.render(game));
+		return ok(views.html.question.render(game));
+	}
+
+	@play.db.jpa.Transactional
+	public static Registration getRegistratonByUserName(String userName) {
+		Registration r = findByUsername(userName);
+		return r;
+	}
+
+	private static Registration findByUsername(String userName) {
+		EntityManager em = play.db.jpa.JPA.em();
+		return em.find(Registration.class, userName);
 	}
 }
