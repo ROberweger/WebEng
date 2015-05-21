@@ -4,6 +4,7 @@ import highscore.HighscoreService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,6 +22,8 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import twitter.TwitterService;
+import twitter.TwitterStatusMessage;
 import views.html.jeopardy;
 import views.html.question;
 import views.html.winner;
@@ -159,7 +162,17 @@ public class GameController extends Controller {
 			return redirect(routes.GameController.playGame());
 		
 		Logger.info("[" + request().username() + "] Game over.");	
-		HighscoreService.INSTANCE.postToScoreboard(game);
+		String uuid = HighscoreService.INSTANCE.postToScoreboard(game);
+		if(uuid != null)
+		{
+			try {
+				TwitterService.INSTANCE.publishUuid(new TwitterStatusMessage(game.getHuman().getName(), uuid, new Date()));
+				Logger.info("UUID " + uuid + " published on Twitter");
+				//TODO: Show message to user
+			} catch (Exception e) {
+				Logger.error("Publishing of uuid to Twitter failed");
+			}
+		}
 		return ok(winner.render(game));
 	}
 }

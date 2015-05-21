@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+
 import models.JeopardyGame;
 import models.JeopardyUser;
 import models.JeopardyUser.Gender;
@@ -23,19 +24,20 @@ public class HighscoreService {
 		}
 	}
 
-	public void postToScoreboard(JeopardyGame game)
+	public String postToScoreboard(JeopardyGame game)
 	{
 		Logger.info("Post to scoreboard");
 		PublishHighScoreService service = new PublishHighScoreService();
 		PublishHighScoreEndpoint publishHighScorePort = service.getPublishHighScorePort();
 		
-		String uuid;
+		String uuid = null;
 		try {
 			uuid = publishHighScorePort.publishHighScore(createHighScoreRequest(game));
 			Logger.info("Post to Highscore board failed");
 		} catch (Failure e) {
 			Logger.error("Post to highscore board failed");
 		}
+		return uuid;
 	}
 	
 	private HighScoreRequestType createHighScoreRequest(JeopardyGame game)
