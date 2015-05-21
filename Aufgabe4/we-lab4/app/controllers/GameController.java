@@ -1,5 +1,7 @@
 package controllers;
 
+import highscore.HighscoreService;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -156,7 +158,8 @@ public class GameController extends Controller {
 		if(game == null || !game.isGameOver())
 			return redirect(routes.GameController.playGame());
 		
-		Logger.info("[" + request().username() + "] Game over.");		
+		Logger.info("[" + request().username() + "] Game over.");	
+		HighscoreService.INSTANCE.postToScoreboard(game);
 		return ok(winner.render(game));
 	}
 }
