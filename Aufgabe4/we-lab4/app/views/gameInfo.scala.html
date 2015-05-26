@@ -1,4 +1,4 @@
-@(leader: models.Player, second: models.Player, totalQuestions: Int, leaderYou: Boolean)
+@(leader: models.Player, second: models.Player, totalQuestions: Int, leaderYou: Boolean, twitterMsg: String)
 @import play.i18n._
 
 
@@ -28,6 +28,8 @@
 
 <section id="gameinfo" aria-labelledby="gameinfoheading">
    <h2 id="@(state)infoheading" class="accessibility">@Messages.get("gameinfo.accessibility." + state)</h2>
+   
+   <p id="twitterMsg">@twitterMsg</p>
    
    <section @if(!gameOver){id="firstplayer"} class="playerinfo leader" aria-labelledby="@leaderId">
       <h3 id="@leaderId" @if(!gameOver){class="accessibility"}>

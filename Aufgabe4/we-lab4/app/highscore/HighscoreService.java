@@ -33,7 +33,7 @@ public class HighscoreService {
 		String uuid = null;
 		try {
 			uuid = publishHighScorePort.publishHighScore(createHighScoreRequest(game));
-			Logger.info("Post to Highscore board failed");
+			Logger.info("Post to Highscore board successful. Returned UUID: " + uuid);
 		} catch (Failure e) {
 			Logger.error("Post to highscore board failed");
 		}

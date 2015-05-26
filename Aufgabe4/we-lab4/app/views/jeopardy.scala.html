@@ -8,7 +8,7 @@
 @main("selection-page", "Fragenauswahl") {
       <!-- Content -->
       <div role="main"> 
-         @gameInfo(game.getLeader(), game.getSecond(), game.getMaxQuestions(), game.isHumanPlayer(game.getLeader().getUser()))
+         @gameInfo(game.getLeader(), game.getSecond(), game.getMaxQuestions(), game.isHumanPlayer(game.getLeader().getUser()), "")
 
          <!-- Question -->
          <section id="question-selection" aria-labelledby="questionheading">

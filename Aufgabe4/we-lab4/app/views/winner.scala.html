@@ -1,11 +1,11 @@
-@(game: models.JeopardyGame)
+@(game: models.JeopardyGame, twitterMsg: String)
 @import play.i18n._
 @import helper._
 
 @main("winner-page", "Gewinnanzeige") {      
       <!-- Content -->
       <div role="main">
-		@gameInfo(game.getLeader(), game.getSecond(), game.getMaxQuestions(), game.isHumanPlayer(game.getLeader().getUser()))
+		@gameInfo(game.getLeader(), game.getSecond(), game.getMaxQuestions(), game.isHumanPlayer(game.getLeader().getUser()), twitterMsg)
          <section id="newgame" aria-labelledby="newgameheading">
              <h2 id="newgameheading" class="accessibility">@Messages.get("quizover.newgame")</h2>
              @helper.form(routes.GameController.newGame()) {

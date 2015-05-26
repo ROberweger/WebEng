@@ -104,7 +104,7 @@ public class GameController extends Controller {
 			return ok(question.render(game));
 		} else if(game.isGameOver()) {
 			Logger.info("[" + request().username() + "] Game over... redirect");
-			return ok(winner.render(game));
+			return ok(winner.render(game, ""));
 		}			
 		return ok(jeopardy.render(game));
 	}
@@ -163,16 +163,18 @@ public class GameController extends Controller {
 		
 		Logger.info("[" + request().username() + "] Game over.");	
 		String uuid = HighscoreService.INSTANCE.postToScoreboard(game);
+		String twitterMsg = "";
 		if(uuid != null)
 		{
 			try {
 				TwitterService.INSTANCE.publishUuid(new TwitterStatusMessage(game.getHuman().getName(), uuid, new Date()));
 				Logger.info("UUID " + uuid + " published on Twitter");
+				twitterMsg = "UUID " + uuid + " wurde auf Twitter veröffentlicht";
 				//TODO: Show message to user
 			} catch (Exception e) {
-				Logger.error("Publishing of uuid to Twitter failed");
+				Logger.error("Publish UUID to Twitter failed");
 			}
 		}
-		return ok(winner.render(game));
+		return ok(winner.render(game, twitterMsg));
 	}
 }
