@@ -3,12 +3,14 @@ import java.io.InputStream;
 import java.util.List;
 
 import models.Category;
+import models.JeopardyDAO;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
 import play.libs.F.Function0;
+import data.DBPediaDataInserter;
 import data.JSONDataInserter;
 
 public class Global extends GlobalSettings {
@@ -22,6 +24,24 @@ public class Global extends GlobalSettings {
 		Logger.info(categories.size() + " categories from json file '" + file + "' inserted.");
 	}
 	
+	/*
+	 * Additional transactional section to insert dbpedia data in db
+	 */
+	@play.db.jpa.Transactional
+	public static void insertDBPediaData() throws IOException {	
+		
+		try {
+			Logger.info("Data from: DBPedia");
+			Category category = DBPediaDataInserter.insertDBPediaData();
+			JeopardyDAO.INSTANCE.persist(category);
+			Logger.info(category.getNameEN() + " from dbpedia was inserted.");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@play.db.jpa.Transactional
     public void onStart(Application app) {
        try {
@@ -30,6 +50,7 @@ public class Global extends GlobalSettings {
 			@Override
 			public Boolean apply() throws Throwable {
 				insertJSonData();
+				insertDBPediaData(); //also insert DBPediaData
 				return true;
 			}
 			   

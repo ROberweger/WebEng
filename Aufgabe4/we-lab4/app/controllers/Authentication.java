@@ -1,5 +1,6 @@
 package controllers;
 
+import data.DBPediaDataInserter;
 import models.JeopardyDAO;
 import models.JeopardyUser;
 import play.Logger;
@@ -13,6 +14,7 @@ public class Authentication extends Controller {
 
 	public static Result login() {
 		Logger.info("Go to login page.");
+		
 		return ok(authentication.render(Form.form()));
 	}
 
