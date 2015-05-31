@@ -96,7 +96,7 @@ public class JeopardyDAO implements IGameDAO {
      */
     @Override
     public <E extends BaseEntity> List<E> findEntities(Class<E> entityClazz) {
-        List<E> listAll = em().createNamedQuery("findAll", entityClazz).getResultList();
+        List<E> listAll = em().createNamedQuery(entityClazz.getSimpleName()+".findAll", entityClazz).getResultList();
         return listAll;
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 
-@javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Category s")
+@javax.persistence.NamedQuery(name = "Category.findAll", query = "SELECT s FROM Category s")
 @javax.persistence.Entity
 public class Category extends BaseEntity {
 
