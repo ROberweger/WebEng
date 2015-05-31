@@ -7,6 +7,12 @@ import java.util.List;
 /**
  * Represents a question, which is stored in the DB
  */
+@javax.persistence.NamedQueries({
+        @javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Question s"),
+        @javax.persistence.NamedQuery(name = "findById", query = "SELECT s FROM Question s WHERE s.id = :id"),
+        @javax.persistence.NamedQuery(name = "deleteAll", query = "DELETE FROM Question")
+})
+@javax.persistence.Entity
 public class Question extends BaseEntity {
 
     private String textDE;
@@ -14,12 +20,17 @@ public class Question extends BaseEntity {
     private int value;
 
     //The category to which this question belongs to
+    @javax.persistence.ManyToOne
     private Category category;
 
 
     //A list of right choices in this category
+    @javax.persistence.OneToMany
     private List<Answer> answers = new ArrayList<Answer>();
 
+
+    public Question() {
+    }
 
     /**
      * Add a wrong choice
@@ -112,26 +123,38 @@ public class Question extends BaseEntity {
     public void setAnswers(List<Answer> choices) {
         this.answers = choices;
     }
-    
+
     public List<Answer> getCorrectAnswers() {
-    	List<Answer> correct = new ArrayList<Answer>();
-    	for(Answer c : answers)
-    		if(c.isRight())
-    			correct.add(c);
-    	return correct;
+        List<Answer> correct = new ArrayList<Answer>();
+        for(Answer c : answers)
+            if(c.isRight())
+                correct.add(c);
+        return correct;
     }
-    
+
     public List<Answer> getWrongAnswers() {
-    	List<Answer> wrong = new ArrayList<Answer>();
-    	for(Answer c : answers)
-    		if(c.isWrong())
-    			wrong.add(c);
-    	return wrong;
+        List<Answer> wrong = new ArrayList<Answer>();
+        for(Answer c : answers)
+            if(c.isWrong())
+                wrong.add(c);
+        return wrong;
     }
-    
+
     public List<Answer> getShuffledAnswers() {
-    	List<Answer> answers = new ArrayList<>(getAnswers());
-    	Collections.shuffle(answers);
-    	return answers;
+        List<Answer> answers = new ArrayList<>(getAnswers());
+        Collections.shuffle(answers);
+        return answers;
+    }
+    @javax.persistence.Id
+    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+    private Long id;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

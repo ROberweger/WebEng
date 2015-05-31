@@ -8,6 +8,11 @@ import java.util.List;
 /**
  * Represents a category, which is stored in the DB
  */
+@javax.persistence.NamedQueries({
+        @javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Category s"),
+        @javax.persistence.NamedQuery(name = "findById", query = "SELECT s FROM Category s WHERE s.id = :id")
+})
+@javax.persistence.Entity
 public class Category extends BaseEntity {
 
 
@@ -16,8 +21,9 @@ public class Category extends BaseEntity {
 
 
     //A list of questions in this category
+    @javax.persistence.OneToMany
     private List<Question> questions = new ArrayList<Question>();
-    
+
     /**
      * Add a new question to the category
      * @param question
@@ -78,14 +84,26 @@ public class Category extends BaseEntity {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
-    
-    public void sort() {
-    	Collections.sort(questions, new Comparator<Question>() {
-			@Override
-			public int compare(Question questionA, Question questionB) {
-				return Integer.compare(questionA.getValue(), questionB.getValue());
-			}
 
-		});
+    public void sort() {
+        Collections.sort(questions, new Comparator<Question>() {
+            @Override
+            public int compare(Question questionA, Question questionB) {
+                return Integer.compare(questionA.getValue(), questionB.getValue());
+            }
+
+        });
+    }
+
+    @javax.persistence.Id
+    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

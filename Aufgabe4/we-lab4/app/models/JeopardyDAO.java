@@ -1,26 +1,28 @@
 package models;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-
-import play.db.jpa.JPA;
+import java.util.List;
 
 /**
  * Provides Data Access methods for JPA
  */
 public class JeopardyDAO implements IGameDAO {
+    private static EntityManagerFactory JPA;
     public static final JeopardyDAO INSTANCE = new JeopardyDAO();
 
     private JeopardyDAO() { }
-    
+
     /**
      * Get a given quiz user based on the id
+     *
+     * @param categoryClass
      * @param id
      * @return
      */
-    public JeopardyUser findById(long id) {
+    public JeopardyUser findById(Class<Category> categoryClass, long id) {
         return em().find(JeopardyUser.class, id);
     }
 
@@ -57,8 +59,7 @@ public class JeopardyDAO implements IGameDAO {
      */
     @Override
     public void persist(BaseEntity entity) {
-        // TODO: Implement Method
-        throw new UnsupportedOperationException("Not yet implemented.");
+        em().persist(entity);
     }
 
 
@@ -71,8 +72,7 @@ public class JeopardyDAO implements IGameDAO {
      */
     @Override
     public <T extends BaseEntity> T merge(T entity) {
-        // TODO: Implement Method
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return em().merge(entity);
     }
 
     /**
@@ -84,11 +84,8 @@ public class JeopardyDAO implements IGameDAO {
      */
     @Override
     public <T extends BaseEntity> T findEntity(Long id, Class<T> entityClazz) {
-        // TODO: Implement Method
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return em().find(entityClazz, id);
     }
-
-
     /**
      * Get a list of all entities of a certain type
      *
@@ -98,16 +95,33 @@ public class JeopardyDAO implements IGameDAO {
      */
     @Override
     public <E extends BaseEntity> List<E> findEntities(Class<E> entityClazz) {
-        // TODO: Implement Method
-        throw new UnsupportedOperationException("Not yet implemented.");
+        List<E> listAll = em().createNamedQuery("findAll", entityClazz).getResultList();
+        return listAll;
+    }
+    public void deleteEntites(Class entityClazz){
+        em().createNamedQuery("deleteAll",entityClazz).executeUpdate();
+    }
+    public void remove(BaseEntity entity) {
+        em().remove(entity);
+    }
+    public static JeopardyDAO getInstance(){
+        return INSTANCE;
     }
 
     /**
      * Get the entity manager
      * @return
      */
-    private EntityManager em() {
-        return JPA.em();
+    private static EntityManager em() {
+        if (JPA == null) {
+            JPA = Persistence.createEntityManagerFactory("defaultPersistenceUnit");
+        }
+        return JPA.createEntityManager();
+    }
+    private void shutdown() {
+        if (JPA != null) {
+            JPA.close();
+        }
     }
 
 }
