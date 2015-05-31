@@ -1,5 +1,6 @@
 package models;
 
+import javax.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,10 +9,9 @@ import java.util.List;
 /**
  * Represents a category, which is stored in the DB
  */
-@javax.persistence.NamedQueries({
-        @javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Category s"),
-        @javax.persistence.NamedQuery(name = "findById", query = "SELECT s FROM Category s WHERE s.id = :id")
-})
+
+
+@javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Category s")
 @javax.persistence.Entity
 public class Category extends BaseEntity {
 
@@ -21,7 +21,7 @@ public class Category extends BaseEntity {
 
 
     //A list of questions in this category
-    @javax.persistence.OneToMany
+    @javax.persistence.OneToMany(cascade= CascadeType.ALL, mappedBy="category")
     private List<Question> questions = new ArrayList<Question>();
 
     /**
@@ -93,17 +93,5 @@ public class Category extends BaseEntity {
             }
 
         });
-    }
-
-    @javax.persistence.Id
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }
