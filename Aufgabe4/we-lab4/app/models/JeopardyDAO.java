@@ -1,16 +1,17 @@
 package models;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import play.db.jpa.JPA;
+import javax.persistence.*;
+
 import javax.persistence.TypedQuery;
 import java.util.List;
+
 
 /**
  * Provides Data Access methods for JPA
  */
 public class JeopardyDAO implements IGameDAO {
-    private static EntityManagerFactory JPA;
+
     public static final JeopardyDAO INSTANCE = new JeopardyDAO();
 
     private JeopardyDAO() { }
@@ -98,14 +99,10 @@ public class JeopardyDAO implements IGameDAO {
         List<E> listAll = em().createNamedQuery("findAll", entityClazz).getResultList();
         return listAll;
     }
-    public void deleteEntites(Class entityClazz){
-        em().createNamedQuery("deleteAll",entityClazz).executeUpdate();
-    }
+
+
     public void remove(BaseEntity entity) {
         em().remove(entity);
-    }
-    public static JeopardyDAO getInstance(){
-        return INSTANCE;
     }
 
     /**
@@ -113,15 +110,7 @@ public class JeopardyDAO implements IGameDAO {
      * @return
      */
     private static EntityManager em() {
-        if (JPA == null) {
-            JPA = Persistence.createEntityManagerFactory("defaultPersistenceUnit");
-        }
-        return JPA.createEntityManager();
-    }
-    private void shutdown() {
-        if (JPA != null) {
-            JPA.close();
-        }
+        return JPA.em();
     }
 
 }

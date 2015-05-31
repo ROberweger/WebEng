@@ -1,5 +1,7 @@
 package models;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,11 +9,8 @@ import java.util.List;
 /**
  * Represents a question, which is stored in the DB
  */
-@javax.persistence.NamedQueries({
-        @javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Question s"),
-        @javax.persistence.NamedQuery(name = "findById", query = "SELECT s FROM Question s WHERE s.id = :id"),
-        @javax.persistence.NamedQuery(name = "deleteAll", query = "DELETE FROM Question")
-})
+
+@javax.persistence.NamedQuery(name = "Question.findAll", query = "SELECT s FROM Question s")
 @javax.persistence.Entity
 public class Question extends BaseEntity {
 
@@ -20,12 +19,12 @@ public class Question extends BaseEntity {
     private int value;
 
     //The category to which this question belongs to
-    @javax.persistence.ManyToOne
+    @javax.persistence.ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
 
     //A list of right choices in this category
-    @javax.persistence.OneToMany
+    @javax.persistence.OneToMany(cascade= CascadeType.ALL, mappedBy="question", fetch = FetchType.EAGER)
     private List<Answer> answers = new ArrayList<Answer>();
 
 
@@ -145,16 +144,5 @@ public class Question extends BaseEntity {
         Collections.shuffle(answers);
         return answers;
     }
-    @javax.persistence.Id
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-    private Long id;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

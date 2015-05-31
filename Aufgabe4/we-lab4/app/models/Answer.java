@@ -1,31 +1,23 @@
 package models;
 
 
-
+import javax.persistence.FetchType;
 
 /**
  * Represents an answer which is stored in the DB
  */
 
-@javax.persistence.NamedQueries({
-        @javax.persistence.NamedQuery(name = "findAll", query = "SELECT s FROM Answer s"),
-        @javax.persistence.NamedQuery(name = "findById", query = "SELECT s FROM Answer s WHERE s.id = :id"),
-        @javax.persistence.NamedQuery(name = "deleteAll", query = "DELETE FROM Answer")
-})
+@javax.persistence.NamedQuery(name = "Answer.findAll", query = "SELECT s FROM Answer s")
 @javax.persistence.Entity
 public class Answer extends BaseEntity {
 
-
-    @javax.persistence.Id
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-    private Long id;
 
     private String textDE;
     private String textEN;
 
     private Boolean correctAnswer;
 
-    @javax.persistence.ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+    @javax.persistence.ManyToOne(fetch = FetchType.EAGER)
     private Question question;
 
     public Answer() {
@@ -100,12 +92,4 @@ public class Answer extends BaseEntity {
     }
 
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
