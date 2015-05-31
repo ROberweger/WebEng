@@ -1,15 +1,14 @@
 package highscore;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-
 import models.JeopardyGame;
 import models.JeopardyUser;
 import models.JeopardyUser.Gender;
 import play.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class HighscoreService {
 	public static final HighscoreService INSTANCE = new HighscoreService();
@@ -69,8 +68,11 @@ public class HighscoreService {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		GregorianCalendar birthdateCal = new GregorianCalendar();
-		birthdateCal.setTime(birthdate);
-		user.setBirthDate(datatypeFactory.newXMLGregorianCalendar(birthdateCal));
+		if(birthdate != null) {
+			birthdateCal.setTime(birthdate);
+			user.setBirthDate(datatypeFactory.newXMLGregorianCalendar(birthdateCal));
+		}
+
 		user.setGender(GenderType.getByJeopardyGender(gender));
 		user.setPoints(points);
 		user.setPassword("");
